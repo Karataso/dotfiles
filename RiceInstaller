@@ -72,10 +72,11 @@ welcome() {
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Download my dotfiles in ${HOME}/dotfiles
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Backup of possible existing configurations (bspwm, polybar, etc...)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install my configuration
+  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install and enable LightDM + the 'greeter' theme (only if no other display manager is enabled)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Enabling MPD service (Music player daemon)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Change your shell to zsh shell
 
-${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}My dotfiles DO NOT modify any of your system configurations${CNC}
+${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}The only system changes made are the LightDM setup (session entry, greeter config and service)${CNC}
 ${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}This script does NOT have the potential power to break your system${CNC}
 
 "
@@ -160,7 +161,7 @@ install_dependencies() {
     sleep 2
 
     sudo pacman -Syy
-    dependencies="alacritty base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv neovim xcolor ncmpcpp npm pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi rustup sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
+    dependencies="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv neovim xcolor ncmpcpp npm pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi rustup sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
 
     # Arrays temporales
     failed_deps=""
@@ -207,7 +208,7 @@ install_gh0stzk_dependencies() {
     logo "Installing needed packages from gh0stzk repository..."
     sleep 2
 
-    gh0stzk_dependencies="st-gh0stzk gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline gh0stzk-icons-candy gh0stzk-icons-catppuccin-mocha gh0stzk-icons-dracula gh0stzk-icons-glassy gh0stzk-icons-gruvbox-plus-dark gh0stzk-icons-hack gh0stzk-icons-luv gh0stzk-icons-sweet-rainbow gh0stzk-icons-tokyo-night gh0stzk-icons-vimix-white gh0stzk-icons-zafiro gh0stzk-icons-zafiro-purple"
+    gh0stzk_dependencies="gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline gh0stzk-icons-candy gh0stzk-icons-catppuccin-mocha gh0stzk-icons-dracula gh0stzk-icons-glassy gh0stzk-icons-gruvbox-plus-dark gh0stzk-icons-hack gh0stzk-icons-luv gh0stzk-icons-sweet-rainbow gh0stzk-icons-tokyo-night gh0stzk-icons-vimix-white gh0stzk-icons-zafiro gh0stzk-icons-zafiro-purple"
 
     # Arrays temporales
     failed_gh0st_deps=""
@@ -409,7 +410,7 @@ backup_existing_config() {
     sleep 1
 
     # Dirs in ~/.config/
-    cfg_dir="bspwm alacritty cava clipcat ghostty picom rofi eww sxhkd dunst jgmenu kitty polybar geany gtk-3.0 ncmpcpp yazi zsh mpd mpv paru st zathura"
+    cfg_dir="bspwm cava clipcat picom rofi eww sxhkd dunst jgmenu kitty polybar geany gtk-3.0 ncmpcpp yazi zsh mpd mpv paru zathura"
     for cfg in $cfg_dir; do
         [ -d "$HOME/.config/$cfg" ] && mv "$HOME/.config/$cfg" "$backup_folder"
     done
@@ -462,7 +463,7 @@ install_dotfiles() {
     done
 
     # Copy files to ~/.config
-    dots_config_dir="alacritty bspwm cava clipcat dunst geany ghostty gtk-3.0 jgmenu kitty mpd mpv ncmpcpp paru systemd yazi zsh st zathura"
+    dots_config_dir="bspwm cava clipcat dunst geany gtk-3.0 jgmenu kitty mpd mpv ncmpcpp paru systemd yazi zsh zathura"
     for dots_cfg in $dots_config_dir; do
         cp -R "$HOME/.local/share/gh0stzk/config/$dots_cfg" "$HOME/.config/"
     done
@@ -527,6 +528,152 @@ install_dotfiles() {
     fi
 
     printf "\n%s%sDotfiles installed successfully!%s\n" "$BLD" "$CGR" "$CNC"
+    sleep 3
+}
+
+setup_display_manager() {
+    clear
+    logo "Configuring Display Manager"
+    sleep 2
+
+    # Never fight a display manager the user already has enabled
+    dm_enabled=""
+    for dm in gdm sddm lxdm ly greetd xdm lightdm; do
+        if systemctl is-enabled --quiet "${dm}.service" 2>/dev/null; then
+            dm_enabled="$dm"
+            break
+        fi
+    done
+
+    if [ -n "$dm_enabled" ] && [ "$dm_enabled" != "lightdm" ]; then
+        printf "%b\n\n" "${BLD}${CYE}${dm_enabled} is already enabled as your display manager. Skipping LightDM setup.${CNC}"
+        sleep 3
+        return
+    fi
+
+    if [ "$dm_enabled" = "lightdm" ]; then
+        printf "%b\n" "${BLD}${CYE}LightDM is already enabled, refreshing its configuration...${CNC}"
+    else
+        printf "%b" "A display manager is what greets you after boot and starts your bspwm session.\nNo enabled display manager was found.\n\n"
+
+        while :; do
+            printf "%b" "${BLD}${CYE}Install and enable LightDM with the bspwm session? ${CNC}[Y/n]: "
+            read -r install_lightdm
+            case "$install_lightdm" in
+                [Yy]|"") install_lightdm="y"; break ;;
+                [Nn]) install_lightdm="n"; break ;;
+                *) printf " %b%bError:%b write 'y' or 'n'\n" "${BLD}" "${CRE}" "${CNC}" ;;
+            esac
+        done
+
+        if [ "$install_lightdm" != "y" ]; then
+            printf "\n%b\n\n" "${BLD}${CYE}Skipping LightDM setup.${CNC}"
+            sleep 2
+            return
+        fi
+    fi
+
+    # xorg-server is a safety net for minimal installs without X11
+    printf "%b\n" "${BLD}${CYE}Installing LightDM...${CNC}"
+    if ! sudo pacman -S --noconfirm --needed lightdm xorg-server; then
+        printf "\n%b\n\n" "${BLD}${CRE}Failed to install LightDM. Skipping its configuration.${CNC}"
+        sleep 3
+        return
+    fi
+
+    # web-greeter only lives in the AUR, so paru builds it. If that fails, fall
+    # back to the GTK greeter instead of leaving you without a login screen.
+    greeter_session="lightdm-gtk-greeter"
+    greeter_theme=""
+    printf "%b\n" "${BLD}${CYE}Installing the web greeter (AUR build, this can take a while)...${CNC}"
+    if command -v paru >/dev/null 2>&1 && paru -S --noconfirm --needed web-greeter; then
+        greeter_session="web-greeter"
+        greeter_theme="$HOME/.local/share/gh0stzk/misc/lightdm/greeter"
+
+        if [ -d "$greeter_theme" ]; then
+            printf "%b\n" "${BLD}${CYE}Installing the 'greeter' theme...${CNC}"
+            sudo mkdir -p /usr/share/web-greeter/themes
+            sudo rm -rf /usr/share/web-greeter/themes/greeter
+            sudo cp -R "$greeter_theme" /usr/share/web-greeter/themes/greeter
+        else
+            printf "%b\n" "${BLD}${CRE}Theme not found at ${greeter_theme}. Using web-greeter's default theme.${CNC}"
+            greeter_theme=""
+        fi
+    else
+        printf "%b\n" "${BLD}${CRE}web-greeter could not be installed. Falling back to the GTK greeter.${CNC}"
+        if ! sudo pacman -S --noconfirm --needed lightdm-gtk-greeter; then
+            printf "\n%b\n\n" "${BLD}${CRE}Failed to install a greeter. Skipping LightDM configuration.${CNC}"
+            sleep 3
+            return
+        fi
+    fi
+
+    # Register the bspwm session so the greeter can start it
+    printf "%b\n" "${BLD}${CYE}Creating bspwm session entry...${CNC}"
+    sudo mkdir -p /usr/local/share/xsessions
+    sudo tee /usr/local/share/xsessions/bspwm.desktop >/dev/null <<'EOF'
+[Desktop Entry]
+Name=Bspwm
+Comment=Binary space partitioning window manager
+Exec=/usr/bin/bspwm
+Type=Application
+Keywords=wm;
+EOF
+
+    # Set the greeter and make bspwm the default session
+    lightdm_conf="/etc/lightdm/lightdm.conf"
+    if [ -f "$lightdm_conf" ]; then
+        if [ ! -f "${lightdm_conf}.bak" ]; then
+            sudo cp "$lightdm_conf" "${lightdm_conf}.bak"
+        fi
+
+        set_lightdm_option() {
+            key="$1"
+            value="$2"
+            # Respect values the user already set explicitly, unless we just
+            # installed the greeter and need the session to match it.
+            if [ "$3" != "force" ] && sudo grep -qE "^${key}=" "$lightdm_conf"; then
+                printf "%b\n" "${BLD}${CYE}Keeping existing ${key}=${CNC}"
+            elif sudo grep -qE "^[#[:space:]]*${key}=" "$lightdm_conf"; then
+                sudo sed -i "s|^[#[:space:]]*${key}=.*|${key}=${value}|" "$lightdm_conf"
+            elif sudo grep -q '^\[Seat:\*\]' "$lightdm_conf"; then
+                sudo sed -i "/^\[Seat:\*\]/a ${key}=${value}" "$lightdm_conf"
+            else
+                printf '\n[Seat:*]\n%s=%s\n' "$key" "$value" | sudo tee -a "$lightdm_conf" >/dev/null
+            fi
+        }
+
+        set_lightdm_option greeter-session "$greeter_session" force
+        set_lightdm_option user-session bspwm
+    else
+        printf "%b\n" "${BLD}${CRE}LightDM config not found: ${CYE}${lightdm_conf}${CNC}"
+    fi
+
+    # Point web-greeter at the installed theme, preserving the rest of its config
+    if [ "$greeter_session" = "web-greeter" ] && [ -n "$greeter_theme" ]; then
+        web_greeter_conf="/etc/lightdm/web-greeter.toml"
+
+        if [ -f "$web_greeter_conf" ] && [ ! -f "${web_greeter_conf}.bak" ]; then
+            sudo cp "$web_greeter_conf" "${web_greeter_conf}.bak"
+        fi
+
+        if [ ! -f "$web_greeter_conf" ]; then
+            printf '[greeter]\ntheme = "greeter"\n' | sudo tee "$web_greeter_conf" >/dev/null
+        elif sudo grep -qE '^[[:space:]]*theme[[:space:]]*=' "$web_greeter_conf"; then
+            sudo sed -i 's|^[[:space:]]*theme[[:space:]]*=.*|theme = "greeter"|' "$web_greeter_conf"
+        elif sudo grep -qE '^\[greeter\]' "$web_greeter_conf"; then
+            sudo sed -i '/^\[greeter\]/a theme = "greeter"' "$web_greeter_conf"
+        else
+            printf '\n[greeter]\ntheme = "greeter"\n' | sudo tee -a "$web_greeter_conf" >/dev/null
+        fi
+    fi
+
+    # Enable the service and boot into a graphical login by default
+    printf "%b\n" "${BLD}${CYE}Enabling LightDM...${CNC}"
+    sudo systemctl enable lightdm.service
+    sudo systemctl set-default graphical.target
+
+    printf "%b\n\n" "${BLD}${CGR}LightDM is enabled. Pick the 'Bspwm' session at the login screen.${CNC}"
     sleep 3
 }
 
@@ -644,6 +791,7 @@ clone_dotfiles
 
 backup_existing_config
 install_dotfiles
+setup_display_manager
 configure_services
 change_default_shell
 final_prompt

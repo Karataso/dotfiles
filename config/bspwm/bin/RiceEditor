@@ -341,12 +341,12 @@ class RiceEditorApp(Gtk.Window):
 
                 content.pack_start(term_opacity_box, False, False, 10)
 
-                # Encabezado Alacritty
-                alacritty_label = Gtk.Label()
-                alacritty_label.set_markup("<small>The following 2 options will change the appearance for both terminals,\nAlacritty and Kitty</small>")
-                alacritty_label.set_halign(Gtk.Align.START)
+                # Encabezado Terminal
+                terminal_label = Gtk.Label()
+                terminal_label.set_markup("<small>The following 2 options will change the appearance of the Kitty terminal</small>")
+                terminal_label.set_halign(Gtk.Align.START)
 
-                content.pack_start(alacritty_label, False, False, 7)
+                content.pack_start(terminal_label, False, False, 7)
 
                 # Font Size Configuration
                 font_size_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=7)
@@ -1264,7 +1264,7 @@ class RiceEditorApp(Gtk.Window):
 
     def on_apply_font_size(self, button):
         """
-        Aplica el nuevo tamaño de fuente en tiempo real para Alacritty y Kitty.
+        Aplica el nuevo tamaño de fuente en tiempo real para Kitty.
         """
         new_font_size = self.font_size_entry.get_text()
 
@@ -1273,7 +1273,6 @@ class RiceEditorApp(Gtk.Window):
             if 1 <= font_size <= 99:
                 current_theme = self.get_current_theme()
                 config_file = os.path.expanduser(f'~/.config/bspwm/rices/{current_theme}/theme-config.bash')
-                alacritty_config_file = os.path.expanduser('~/.config/alacritty/fonts.toml')
                 kitty_config_file = os.path.expanduser('~/.config/kitty/kitty.conf')
 
                 try:
@@ -1290,20 +1289,6 @@ class RiceEditorApp(Gtk.Window):
 
                     with open(config_file, 'w') as f:
                         f.writelines(content)
-
-                    # Actualizar archivo de configuración de Alacritty
-                    with open(alacritty_config_file, 'r') as f:
-                        lines = f.readlines()
-
-                    for i, line in enumerate(lines):
-                        if line.strip().startswith('size ='):
-                            match = re.match(r'(\s*size\s*=\s*)(\d+)', line)
-                            if match:
-                                lines[i] = f'{match.group(1)}{font_size}\n'
-                            break
-
-                    with open(alacritty_config_file, 'w') as f:
-                        f.writelines(lines)
 
                     # Actualizar archivo de configuración de Kitty
                     with open(kitty_config_file, 'r') as f:
@@ -1361,14 +1346,13 @@ class RiceEditorApp(Gtk.Window):
 
     def on_apply_font_name(self, button):
         """
-        Aplica el nuevo nombre de la fuente en tiempo real para Alacritty y Kitty.
+        Aplica el nuevo nombre de la fuente en tiempo real para Kitty.
         """
         new_font_name = self.font_name_entry.get_text()
 
         if new_font_name:  # Validar que no esté vacío
             current_theme = self.get_current_theme()
             config_file = os.path.expanduser(f'~/.config/bspwm/rices/{current_theme}/theme-config.bash')
-            alacritty_config_file = os.path.expanduser('~/.config/alacritty/fonts.toml')
             kitty_config_file = os.path.expanduser('~/.config/kitty/kitty.conf')
 
             try:
@@ -1385,20 +1369,6 @@ class RiceEditorApp(Gtk.Window):
 
                 with open(config_file, 'w') as f:
                     f.writelines(content)
-
-                # Actualizar archivo de configuración de Alacritty
-                with open(alacritty_config_file, 'r') as f:
-                    lines = f.readlines()
-
-                for i, line in enumerate(lines):
-                    if line.strip().startswith('family ='):
-                        match = re.match(r'(\s*family\s*=\s*)"([^"]+)"', line)
-                        if match:
-                            lines[i] = f'{match.group(1)}"{new_font_name}"\n'
-                            break
-
-                with open(alacritty_config_file, 'w') as f:
-                    f.writelines(lines)
 
                 # Actualizar archivo de configuración de Kitty
                 with open(kitty_config_file, 'r') as f:

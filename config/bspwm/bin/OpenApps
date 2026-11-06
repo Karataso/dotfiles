@@ -18,13 +18,13 @@ case "$1" in
 		RiceSelector
 		;;
 	--terminal)
-		Term --terminal
+		kitty
 		;;
 	--floating)
-		Term --floating
+		kitty --class=FloaTerm
 		;;
 	--checkupdates)
-		Term --checkupdates
+		kitty -o background_opacity=0.93 --class=Updating -e Updates --print-updates
 		;;
 	--netmanager)
 		NetManagerDM
@@ -51,16 +51,16 @@ case "$1" in
 		KeyBoardL
 		;;
 	--yazi)
-		Term --yazi
+		kitty --name=YaziTerm --class=FloaTerm -e yazi
 		;;
 	--nvim)
-		Term --nvim
+		kitty -e nvim
 		;;
 	--music)
-		Term --music
+		kitty --name=MusicTerm --class=FloaTerm -e ncmpcpp
 		;;
 	--fetch)
-		Term --fetch
+		kitty --name=FetchTerm --class=FloaTerm -e ~/.local/bin/sysfetch
 		;;
 	--scratch)
 		Bspwm-ScratchPad
@@ -77,9 +77,6 @@ case "$1" in
 		;;
 	--telegram)
 		telegram-desktop
-		;;
-	--whats)
-		firefox -new-tab https://web.whatsapp.com/
 		;;
 	--soundcontrol)
 		pavucontrol

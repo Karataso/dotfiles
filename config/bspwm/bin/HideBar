@@ -46,7 +46,7 @@ set_padding() {
 }
 
 is_eww_theme() {
-    [ "$current_rice" = "z0mbi3" ] || [ "$current_rice" = "andrea" ]
+    [ "$current_rice" = "z0mbi3" ]
 }
 
 toggle_bar() {

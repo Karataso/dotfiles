@@ -19,18 +19,12 @@ BSPWM,^checkout(wm),gnome-windows
 Exit,^checkout(exit),system-shutdown
 
 ^tag(rices)
-Aline,echo aline > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Andrea,echo andrea > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Brenda,echo brenda > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Cristina,echo cristina > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Cynthia,echo cynthia > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Daniela,echo daniela > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Emilia,echo emilia > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 h4ck3r,echo h4ck3r > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Isabel,echo isabel > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Jan,echo jan > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Karla,echo karla > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Marisol,echo marisol > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Melissa,echo melissa > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Pamela,echo pamela > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Silvia,echo silvia > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors

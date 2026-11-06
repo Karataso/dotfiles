@@ -23,7 +23,7 @@ Welcome to my dotfiles. I’m gh0stzk from Mexico.
 
 These dotfiles are designed with the goal of providing a bspwm environment that is lightweight, efficient, and functional, tailored for any use—whether it’s gaming, web browsing, or a productive work setting.
 
-You’ll have 18 unique themes to choose from, each with its own style, colors, and navigation bar options. With this variety, you’re sure to find one that suits your preferences and needs.
+You’ll have 12 unique themes to choose from, each with its own style, colors, and navigation bar options. With this variety, you’re sure to find one that suits your preferences and needs.
 
 ## :book: Wiki
 I already started writing the [**Wiki**](https://github.com/gh0stzk/dotfiles/wiki), you should give it a read. If it is your first time with a WM, you may be interested in reading [First steps after installing the dotfiles](https://github.com/gh0stzk/dotfiles/wiki/Firsts-steps-after-installing) or maybe read [frequently asked questions and answers](https://github.com/gh0stzk/dotfiles/wiki/Questions---Answers) [Keybinds](https://github.com/gh0stzk/dotfiles/wiki/Keyboard-Shortcuts) [Firefox Theme](https://github.com/gh0stzk/dotfiles/wiki/Firefox-Theme).
@@ -46,10 +46,7 @@ A modular theming system propagates these colors across the entire desktop envir
 - Dunst
 - Rofi
 - Terminals
-  - Alacritty
-  - Ghostty
   - Kitty
-  - St
   - Xfce-terminal
 - Neovim
 - Eww
@@ -131,7 +128,6 @@ Rofi applets to simplify your workflow:
 - Android MTP Manager
 - Power Menu
 - Keyboard Layout
-- Terminal Selector (Alacritty, Kitty, ST and ghostty)
 - Rofi app launcher style selector
 - Tab app switcher
 - Pass Manager (Using pass app)
@@ -186,18 +182,6 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 |:-:|
 |<img src="https://user-images.githubusercontent.com/67278339/280174054-8f56d12d-4efa-4024-99e1-4679591b45ca.gif" alt="Emilia Rice" align="center">|
 
-| Jan |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/6e4959b7-6d07-42c6-8ede-2f3c16094ad2" alt="Jan Rice" align="center"> |
-
-| Aline |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/5ae48d8d-ebcb-4fd5-9c80-78fc325a7a38" alt="Aline Rice" align="center"> |
-
-| Andrea |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/1bfd302f-0e3f-4973-975b-56c78d6140ee" alt="Andrea Rice" align="center"> |
-
 | Cynthia |
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/5df45139-1d73-4f5f-8e8d-a417c86bfb96" alt="Cynthia Rice" align="center"> |
@@ -219,14 +203,6 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/f9e85839-53c9-4e15-a800-8a2f7ca40691" alt="Pamela Rice" align="center"> |
 
-| Cristina |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/e14c6777-25f6-4621-a88b-4fda71dbcc7f" alt="Cristina Rice" align="center"> |
-
-| Karla |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/5455afdf-cc2f-4a8c-8fcd-526c59066d50" alt="Karla Rice" align="center"> |
-
 | z0mbi3 |
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/ff65caa8-6a15-4873-bf05-edf89ac0985d" alt="z0mbi3 Rice" align="center"> |
@@ -238,10 +214,6 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 | Daniela |
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/f296d6b4-9c8a-49ae-bf63-d82e5105f122" alt="Daniela Rice" align="center"> |
-
-| Marisol |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/d11d20c5-1edc-44c8-901b-a4103a139617" alt="Daniela Rice" align="center"> |
 
 | h4ck3r |
 |:-:|
