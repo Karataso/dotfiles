@@ -26,7 +26,7 @@ These dotfiles are designed with the goal of providing a bspwm environment that 
 You’ll have 12 unique themes to choose from, each with its own style, colors, and navigation bar options. With this variety, you’re sure to find one that suits your preferences and needs.
 
 ## :book: Wiki
-I already started writing the [**Wiki**](https://github.com/gh0stzk/dotfiles/wiki), you should give it a read. If it is your first time with a WM, you may be interested in reading [First steps after installing the dotfiles](https://github.com/gh0stzk/dotfiles/wiki/Firsts-steps-after-installing) or maybe read [frequently asked questions and answers](https://github.com/gh0stzk/dotfiles/wiki/Questions---Answers) [Keybinds](https://github.com/gh0stzk/dotfiles/wiki/Keyboard-Shortcuts) [Firefox Theme](https://github.com/gh0stzk/dotfiles/wiki/Firefox-Theme).
+I already started writing the [**Wiki**](https://github.com/gh0stzk/dotfiles/wiki), you should give it a read. If it is your first time with a WM, you may be interested in reading [First steps after installing the dotfiles](https://github.com/gh0stzk/dotfiles/wiki/Firsts-steps-after-installing) or maybe read [frequently asked questions and answers](https://github.com/gh0stzk/dotfiles/wiki/Questions---Answers) [Keybinds](https://github.com/gh0stzk/dotfiles/wiki/Keyboard-Shortcuts).
 
 ## 🚀 Features
 <img src="https://user-images.githubusercontent.com/67278339/221605474-21d65156-0cf7-485c-bd1a-40792c37817e.png" alt="Linux Fetch" align="right" width="450">
@@ -45,12 +45,8 @@ A modular theming system propagates these colors across the entire desktop envir
 - GTK (3.x)
 - Dunst
 - Rofi
-- Terminals
-  - Kitty
-  - Xfce-terminal
-- Neovim
+- Kitty
 - Eww
-- Firefox
 - Jgmenu
 - Geany
 - ScreenLocker (i3lock-color)
@@ -132,24 +128,6 @@ Rofi applets to simplify your workflow:
 - Tab app switcher
 - Pass Manager (Using pass app)
 
-#### Neovim Setup
-
-Simple yet powerful neovim configuration with the following features:
-
-- Treesitter
-- Lsp servers
-- Completions [blink.nvim](https://github.com/Saghen/blink.nvim)
-- Formatting [conform.nvim](https://github.com/stevearc/conform.nvim)
-- Picker [Snacks-picker](https://github.com/folke/snacks.nvim/blob/main/docs/picker.md)
-- Explorer [Snacks-explorer](https://github.com/folke/snacks.nvim/blob/main/docs/picker.md)
-- Tab Line [barbar.nvim](https://github.com/romgrk/barbar.nvim)
-- Statusline [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
-- Autopairs [mini-autopairs](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-pairs.md)
-- Hipatterns [mini-hipatterns](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-hipatterns.md)
-- Indent guides [Snacks-indent](https://github.com/folke/snacks.nvim/blob/main/docs/indent.md)
-- Dashboard [Snacks-dashboard](https://github.com/folke/snacks.nvim/blob/main/docs/dashboard.md)
-- WhichKey [which-key.nvim](https://github.com/folke/which-key.nvim)
-
 #### Optimized ZSH Configuration
 
 Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin managers. Some features:
@@ -178,10 +156,6 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 
 ### 🎨 The themes
 
-| Emilia |
-|:-:|
-|<img src="https://user-images.githubusercontent.com/67278339/280174054-8f56d12d-4efa-4024-99e1-4679591b45ca.gif" alt="Emilia Rice" align="center">|
-
 | Cynthia |
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/5df45139-1d73-4f5f-8e8d-a417c86bfb96" alt="Cynthia Rice" align="center"> |
@@ -195,17 +169,9 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 |:-:|
 |<img src="https://github.com/gh0stzk/dotfiles/assets/67278339/616c2d93-fabf-41c2-9ab8-9c7b4d6a2e35" alt="Silvia Rice" align="center">|
 
-| Melissa |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/a63e250d-c5d1-4360-afd7-cf64bf55a0fc" alt="Melissa Rice" align="center"> |
-
 | Pamela |
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/f9e85839-53c9-4e15-a800-8a2f7ca40691" alt="Pamela Rice" align="center"> |
-
-| z0mbi3 |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/ff65caa8-6a15-4873-bf05-edf89ac0985d" alt="z0mbi3 Rice" align="center"> |
 
 | Brenda |
 |:-:|
@@ -222,10 +188,6 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 | Varinka |
 |:-:|
 | <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/454d82b4-8f09-4768-bf51-6ce7818ad226" alt="Varinka Rice" align="center"> |
-
-| Yael |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/cbb0a1cc-4e2d-46a2-a4f2-ee0be3d08b50" alt="Yael Rice" align="center"> |
 
 ---
 
@@ -308,19 +270,6 @@ https://github.com/user-attachments/assets/79764678-c519-4a41-a333-2a862a6d10f8
 | :--------------------------------------------------------------------------------------------------: |
 |            The environment changes with each theme. In the gif: (Ranger, Thunar, Ncmpcpp)            |
 
-### Firefox theme
-
-| Firefox theme - z0mbi3 Fox |
-|:-:|
-| <img src="https://github.com/user-attachments/assets/877774da-1d27-4e9e-bd79-b084cf0c293e" alt="Firefox theme - z0mbi3-Fox" align="center"> |
-
-### Neovim setup
-
-| Neovim setup |
-|:-:|
-| ![Neovim setup](https://github.com/user-attachments/assets/deff5074-3d9b-4f00-8edd-82c83b6dccf4) |
-| Plugins included [Neovim setup wiki](https://github.com/gh0stzk/dotfiles/wiki/Neovim-setup) |
-
 ## Very useful keybindigs to know...
 
 | Keys | Action |
@@ -369,17 +318,15 @@ And more.. You need to look sxhkdrc file for more, or press Alt + F1 for a cheat
 > [!NOTE]
 > The installer only works for **ARCH** Linux, and based distros. (Except NO-Systemd ditros like Artix)
 
-Before running this command, check [RiceInstaller](https://raw.githubusercontent.com/gh0stzk/dotfiles/master/RiceInstaller) to make sure it's working and confirm it's safe for your system.
+Before running this command, check [RiceInstaller](https://raw.githubusercontent.com/Karataso/dotfiles/main/RiceInstaller) to make sure it's working and confirm it's safe for your system.
 
 - Open a terminal and execute this commands one by one:
 
 ```sh
-# Download the installer in your $HOME
-curl -LO http://gh0stzk.github.io/dotfiles/RiceInstaller
+# Clone the dotfiles in your $HOME
+git clone https://github.com/Karataso/dotfiles ~/dotfiles
 
-# Give it execution permission
-chmod +x RiceInstaller
-
-# Run the installer
-./RiceInstaller
+# The installer must be started from your $HOME directory
+chmod +x ~/dotfiles/RiceInstaller
+~/dotfiles/RiceInstaller
 ```

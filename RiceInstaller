@@ -69,8 +69,8 @@ welcome() {
 
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} 2 Repositories will be installed. ${CBL}gh0stzk-dotfiles${CNC} and ${CBL}Chaotic-Aur${CNC}
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Check necessary dependencies and install them
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Download my dotfiles in ${HOME}/dotfiles
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Backup of possible existing configurations (bspwm, polybar, etc...)
+  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Download the dotfiles in ${HOME}/.local/share/gh0stzk
+  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Optional backup of possible existing configurations (bspwm, polybar, etc...)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install my configuration
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install and enable LightDM + the 'greeter' theme (only if no other display manager is enabled)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Enabling MPD service (Music player daemon)
@@ -161,7 +161,7 @@ install_dependencies() {
     sleep 2
 
     sudo pacman -Syy
-    dependencies="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv neovim xcolor ncmpcpp npm pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi rustup sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
+    dependencies="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
 
     # Arrays temporales
     failed_deps=""
@@ -356,10 +356,26 @@ install_aur_dependencies() {
 clone_dotfiles() {
     clear
     logo "Downloading dotfiles"
-    repo_url="https://github.com/gh0stzk/dotfiles"
     repo_dir="$HOME/.local/share/gh0stzk"
+    fallback_repo_url="https://github.com/Karataso/dotfiles"
     timestamp=$(date +"%Y%m%d-%H%M%S")
     sleep 2
+
+    # Install from the clone this script is running from, so a fork installs
+    # its own tree instead of pulling upstream over the top of it.
+    repo_url=""
+    for candidate in "$PWD" "$HOME/dotfiles"; do
+        if [ -d "$candidate/.git" ]; then
+            repo_url=$(git -C "$candidate" config --get remote.origin.url 2>/dev/null)
+            [ -n "$repo_url" ] && break
+        fi
+    done
+
+    if [ -z "$repo_url" ]; then
+        repo_url="$fallback_repo_url"
+    fi
+
+    printf "%b\n" "${BLD}${CYE}Source: ${CBL}${repo_url}${CNC}"
 
     # Handle existing repository
     if [ -d "$repo_dir" ]; then
@@ -371,7 +387,10 @@ clone_dotfiles() {
 
     # Clone new repository
     printf "%b\n" "${BLD}${CYE}Cloning dotfiles from: ${CBL}${repo_url}${CNC}"
-    git clone --depth=1 "$repo_url" "$repo_dir"
+    if ! git clone --depth=1 "$repo_url" "$repo_dir"; then
+        printf "\n%b\n\n" "${BLD}${CRE}Could not clone ${repo_url}. Nothing was installed.${CNC}"
+        exit 1
+    fi
     sleep 3
 }
 
@@ -380,29 +399,23 @@ backup_existing_config() {
     logo "Backup files"
     sleep 2
 
-    printf "%b" "My dotfiles come with a lightweight, simple, and functional Neovim configuration.\nBut if you already have a custom, super pro Neovim configuration and don't want to try mine, just type 'n'\n"
+    printf "%b" "Any existing configuration (bspwm, polybar, kitty, zsh, dunst, etc)\ncan be moved out of the way to ${CYE}~/.RiceBackup${CNC} before installing.\nSaying no leaves your files where they are: anything they share with the dots gets overwritten.\n\n"
 
     while :; do
-        printf "%b" "${BLD}${CYE}Do you want to use my Neovim setup? ${CNC}[y/N]: "
-        read -r try_nvim
-        case "$try_nvim" in
-            [Yy]) try_nvim="y"; break ;;
-            [Nn]) try_nvim="n"; break ;;
+        printf "%b" "${BLD}${CYE}Back up your current configuration? ${CNC}[Y/n]: "
+        read -r do_backup
+        case "$do_backup" in
+            [Yy]|"") do_backup="y"; break ;;
+            [Nn]) do_backup="n"; break ;;
             *) printf " %b%bError:%b write 'y' or 'n'\n" "${BLD}" "${CRE}" "${CNC}" ;;
         esac
     done
 
-    printf "\nMy dotfiles come with a beautiful, minimalist Firefox theme, but if you don't want to try it, just type 'n'.\n"
-
-     while :; do
-        printf "%b" "${BLD}${CYE}Do you want to use my Firefox theme? ${CNC}[y/N]: "
-        read -r try_firefox
-        case "$try_firefox" in
-            [Yy]) try_firefox="y"; break ;;
-            [Nn]) try_firefox="n"; break ;;
-            *) printf " %b%bError:%b write 'y' or 'n'\n" "${BLD}" "${CRE}" "${CNC}" ;;
-        esac
-    done
+    if [ "$do_backup" != "y" ]; then
+        printf "\n%b\n\n" "${BLD}${CYE}No backup taken. Installing over what is there.${CNC}"
+        sleep 3
+        return
+    fi
 
     backup_folder="$HOME/.RiceBackup/$(date +%Y%m%d-%H%M%S)"
     mkdir -p "$backup_folder"
@@ -419,30 +432,6 @@ backup_existing_config() {
     for f in ".icons" ".zshrc" ".gtkrc-2.0"; do
         [ -e "$HOME/$f" ] && mv "$HOME/$f" "$backup_folder"
     done
-
-    # If ppl wanna try my nvim config
-    if [ "$try_nvim" = "y" ]; then
-        [ -d "$HOME/.config/nvim" ] && mv "$HOME/.config/nvim" "$backup_folder"
-    fi
-
-    # If ppl wanna try my firefox config
-    if [ "$try_firefox" = "y" ]; then
-        # Create a Firefox profile if none exists
-        if [ ! -d "$HOME/.mozilla" ] && [ ! -d "$HOME/.config/mozilla" ]; then
-            printf "%b\n" "${BLD}${CYE}Creating Firefox profile...${CNC}"
-            timeout 1s firefox --headless --display=0 >/dev/null 2>&1
-            sleep 1
-        fi
-
-        firefox_profile=$(
-            find "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox" \
-                -maxdepth 1 -type d -name '*.default-release' 2>/dev/null | head -n 1)
-
-        if [ -n "$firefox_profile" ]; then
-            [ -d "$firefox_profile/chrome" ] && mv "$firefox_profile/chrome" "$backup_folder"
-            [ -f "$firefox_profile/user.js" ] && mv "$firefox_profile/user.js" "$backup_folder"
-        fi
-    fi
 
     printf "\n%b\n\n" "${BLD}${CGR}All files moved to:${CNC} ${BLD}${CYE}$backup_folder${CNC}"
     sleep 3
@@ -468,32 +457,33 @@ install_dotfiles() {
         cp -R "$HOME/.local/share/gh0stzk/config/$dots_cfg" "$HOME/.config/"
     done
 
-    # If ppl wanna try my nvim config
-    [ "$try_nvim" = "y" ] && cp -R "$HOME/.local/share/gh0stzk/config/nvim" "$HOME/.config/"
+    # cp -R merges, so rices and bars deleted from the dotfiles would survive
+    # forever in an existing install. Drop anything the source tree no longer has.
+    for kind in rices bars; do
+        src="$HOME/.local/share/gh0stzk/config/bspwm/$kind"
+        dst="$HOME/.config/bspwm/$kind"
+        [ -d "$src" ] && [ -d "$dst" ] || continue
 
-    # If ppl wanna try my firefox config
-    if [ "$try_firefox" = "y" ]; then
-        firefox_profile=$(
-            find "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox" \
-                -maxdepth 1 -type d -name '*.default-release' 2>/dev/null | head -n 1)
+        for installed in "$dst"/*/; do
+            [ -d "$installed" ] || continue
+            name=$(basename "$installed")
+            if [ ! -d "$src/$name" ]; then
+                printf "%s%sRemoving %s: %s%s%s\n" "$BLD" "$CYE" "$kind" "$CBL" "$name" "$CNC"
+                rm -rf "$installed"
+            fi
+        done
+    done
 
-        if [ -n "$firefox_profile" ]; then
-            cp -R "$HOME/.local/share/gh0stzk/misc/firefox/chrome" "$firefox_profile"
-            cp "$HOME/.local/share/gh0stzk/misc/firefox/user.js" "$firefox_profile"
-
-            [ -f "$firefox_profile/user.js" ] && sed -i "s|/home/z0mbi3|/home/$USER|g" "$firefox_profile/user.js"
+    # Never leave .rice pointing at a theme that just went away
+    if [ -f "$HOME/.config/bspwm/.rice" ]; then
+        current_rice=$(cat "$HOME/.config/bspwm/.rice")
+        if [ ! -d "$HOME/.config/bspwm/rices/$current_rice" ]; then
+            first_rice=$(find "$HOME/.config/bspwm/rices" -mindepth 1 -maxdepth 1 -type d | sort | head -n 1)
+            if [ -n "$first_rice" ]; then
+                basename "$first_rice" > "$HOME/.config/bspwm/.rice"
+                printf "%s%sTheme '%s' is gone, falling back to %s%s\n" "$BLD" "$CYE" "$current_rice" "$(basename "$first_rice")" "$CNC"
+            fi
         fi
-
-        # Copy startup-page
-        cp -R "$HOME/.local/share/gh0stzk/misc/startup-page" "$HOME/.local/share/"
-
-        timezone=$(timedatectl show --property=Timezone --value 2>/dev/null)
-        [ -z "$timezone" ] && timezone=$(readlink /etc/localtime 2>/dev/null | sed 's|.*/zoneinfo/||')
-
-        sed -i \
-            -e "0,/^[[:space:]]*name:/s|'.*'|'$USER'|" \
-            -e "/^[[:space:]]*timeZone:/s|'.*'|'$timezone'|" \
-        "$HOME/.local/share/startup-page/config.js"
     fi
 
     # Copy files to ~/.local/share

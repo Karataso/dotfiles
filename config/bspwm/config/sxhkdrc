@@ -124,10 +124,6 @@ super + m
 super + y
     OpenApps --yazi
 
-# Neovim
-super + v
-    OpenApps --nvim
-
 # Rice editor
 super + r
     RiceEditor
