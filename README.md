@@ -323,10 +323,14 @@ Before running this command, check [RiceInstaller](https://raw.githubusercontent
 - Open a terminal and execute this commands one by one:
 
 ```sh
-# Clone the dotfiles in your $HOME
+# Clone the dotfiles
 git clone https://github.com/Karataso/dotfiles ~/dotfiles
 
-# The installer must be started from your $HOME directory
+# Run the installer from inside the clone
 chmod +x ~/dotfiles/RiceInstaller
 ~/dotfiles/RiceInstaller
 ```
+
+> [!NOTE]
+> The installer installs straight from the clone it lives in. There is no second
+download, so what ends up in `~/.config` is exactly the tree you cloned.
