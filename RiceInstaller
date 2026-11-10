@@ -25,7 +25,7 @@ CNC=$(tput sgr0)       # Reset colors
 
 # Step banners: plain ASCII and colour only, so they still read on a bare tty.
 STEP=0
-TOTAL=14
+TOTAL=15
 
 banner() {
     clear
@@ -45,7 +45,7 @@ step() {
 # copy is downloaded, so the install always matches the code you are reading.
 dots_dir=$(cd "$(dirname "$0")" 2>/dev/null && pwd)
 
-deps_official="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv nano xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
+deps_official="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv nano xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme pavucontrol picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
 deps_gh0stzk="gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline gh0stzk-icons-candy gh0stzk-icons-catppuccin-mocha gh0stzk-icons-dracula gh0stzk-icons-glassy gh0stzk-icons-gruvbox-plus-dark gh0stzk-icons-hack gh0stzk-icons-luv gh0stzk-icons-sweet-rainbow gh0stzk-icons-tokyo-night gh0stzk-icons-vimix-white gh0stzk-icons-zafiro gh0stzk-icons-zafiro-purple"
 deps_chaotic="i3lock-color simple-mtpfs eww-git"
 deps_aur="xwinwrap-0.9-bin"
@@ -315,10 +315,20 @@ install_dotfiles() {
     if [ -f "$HOME/.config/bspwm/.rice" ]; then
         current_rice=$(cat "$HOME/.config/bspwm/.rice")
         if [ ! -d "$HOME/.config/bspwm/rices/$current_rice" ]; then
-            first_rice=$(find "$HOME/.config/bspwm/rices" -mindepth 1 -maxdepth 1 -type d | sort | head -n 1)
-            if [ -n "$first_rice" ]; then
-                basename "$first_rice" > "$HOME/.config/bspwm/.rice"
-                printf "%s%sTheme '%s' is gone, falling back to %s%s\n" "$BLD" "$CYE" "$current_rice" "$(basename "$first_rice")" "$CNC"
+            # Prefer the default this checkout ships, so a theme renamed
+            # upstream lands the user on it rather than on whatever sorts first
+            fallback_rice=""
+            [ -f "$dots_dir/config/bspwm/.rice" ] && fallback_rice=$(cat "$dots_dir/config/bspwm/.rice")
+            [ -n "$fallback_rice" ] && [ ! -d "$HOME/.config/bspwm/rices/$fallback_rice" ] && fallback_rice=""
+
+            if [ -z "$fallback_rice" ]; then
+                first_rice=$(find "$HOME/.config/bspwm/rices" -mindepth 1 -maxdepth 1 -type d | sort | head -n 1)
+                [ -n "$first_rice" ] && fallback_rice=$(basename "$first_rice")
+            fi
+
+            if [ -n "$fallback_rice" ]; then
+                printf '%s\n' "$fallback_rice" > "$HOME/.config/bspwm/.rice"
+                printf "%s%sTheme '%s' is gone, falling back to %s%s\n" "$BLD" "$CYE" "$current_rice" "$fallback_rice" "$CNC"
             fi
         fi
     fi
@@ -633,6 +643,115 @@ change_default_shell() {
     sleep 3
 }
 
+# Both extras are asked for, never assumed. OnlyOffice is a large download
+# nothing in the desktop needs, and a GRUB theme means rewriting the
+# bootloader config, which is the one file a bad edit can make unbootable.
+install_optional_extras() {
+    step "Optional extras"
+    sleep 2
+
+    printf "%b" "OnlyOffice is a full office suite (Word, Excel, PowerPoint files).\nIt is a few hundred megabytes and nothing the desktop uses needs it.\n\n"
+
+    while :; do
+        printf "%b" "${BLD}${CYE}Install OnlyOffice? ${CNC}[y/N]: "
+        read -r want_onlyoffice
+        case "$want_onlyoffice" in
+            [Yy]) want_onlyoffice="y"; break ;;
+            [Nn]|"") want_onlyoffice="n"; break ;;
+            *) printf " %b%bError:%b write 'y' or 'n'\n" "${BLD}" "${CRE}" "${CNC}" ;;
+        esac
+    done
+
+    if [ "$want_onlyoffice" = "y" ]; then
+        printf "\n%b\n" "${BLD}${CYE}Installing onlyoffice-bin from the AUR...${CNC}"
+        if command -v paru >/dev/null 2>&1 &&
+            paru -S --skipreview --noconfirm onlyoffice-bin; then
+            printf "\n%b\n\n" "${BLD}${CGR}OnlyOffice installed.${CNC}"
+        else
+            printf "\n%b\n\n" "${BLD}${CRE}OnlyOffice did not install; paru's error is above.${CNC}"
+        fi
+    else
+        printf "\n%b\n\n" "${BLD}${CYE}No OnlyOffice.${CNC}"
+    fi
+
+    printf "%b" "The boot menu can be themed too. Vimix is a blurred dark GRUB theme\nby vinceliuice, packaged by kalax2:\n  https://github.com/kalax2/grub2-theme-vimix\n\n"
+
+    grub_reason=""
+    if ! command -v grub-mkconfig >/dev/null 2>&1; then
+        grub_reason="grub-mkconfig is not installed"
+    elif [ ! -f /boot/grub/grub.cfg ]; then
+        grub_reason="/boot/grub/grub.cfg does not exist, so GRUB is not the bootloader in use"
+    elif [ ! -f /etc/default/grub ]; then
+        grub_reason="/etc/default/grub does not exist"
+    fi
+
+    if [ -n "$grub_reason" ]; then
+        printf "%b\n\n" "${BLD}${CYE}Skipping the GRUB theme: ${grub_reason}.${CNC}"
+        sleep 2
+        return
+    fi
+
+    printf "%b" "It copies a few megabytes into /boot/grub/themes/Vimix, adds GRUB_THEME\nto /etc/default/grub (backed up first) and runs grub-mkconfig, which\nrewrites /boot/grub/grub.cfg. A broken grub.cfg can leave the machine\nunbootable, so this stays off unless you say yes. The backup,\n/etc/default/grub.bak, is how you put it back.\n\n"
+
+    while :; do
+        printf "%b" "${BLD}${CYE}Install the Vimix GRUB theme? ${CNC}[y/N]: "
+        read -r want_grub_theme
+        case "$want_grub_theme" in
+            [Yy]) want_grub_theme="y"; break ;;
+            [Nn]|"") want_grub_theme="n"; break ;;
+            *) printf " %b%bError:%b write 'y' or 'n'\n" "${BLD}" "${CRE}" "${CNC}" ;;
+        esac
+    done
+
+    if [ "$want_grub_theme" != "y" ]; then
+        printf "\n%b\n\n" "${BLD}${CYE}Keeping the plain GRUB menu.${CNC}"
+        sleep 2
+        return
+    fi
+
+    grub_tmp=$(mktemp -d)
+    printf "\n%b\n" "${BLD}${CYE}Downloading the Vimix theme...${CNC}"
+
+    if ! git clone --depth=1 https://github.com/kalax2/grub2-theme-vimix.git \
+            "$grub_tmp/vimix" >/dev/null 2>&1 || \
+        [ ! -f "$grub_tmp/vimix/Vimix/theme.txt" ]; then
+        printf "%b\n\n" "${BLD}${CRE}Could not download the theme; leaving GRUB as it is.${CNC}"
+        rm -rf "$grub_tmp"
+        sleep 2
+        return
+    fi
+
+    sudo mkdir -p /boot/grub/themes
+    if ! sudo rm -rf /boot/grub/themes/Vimix ||
+        ! sudo cp -R "$grub_tmp/vimix/Vimix" /boot/grub/themes/; then
+        printf "%b\n\n" "${BLD}${CRE}Could not copy the theme into /boot/grub/themes.${CNC}"
+        rm -rf "$grub_tmp"
+        sleep 2
+        return
+    fi
+    rm -rf "$grub_tmp"
+
+    if [ ! -f /etc/default/grub.bak ]; then
+        sudo cp /etc/default/grub /etc/default/grub.bak
+    fi
+
+    theme_line='GRUB_THEME="/boot/grub/themes/Vimix/theme.txt"'
+    if sudo grep -q '^[#[:space:]]*GRUB_THEME=' /etc/default/grub; then
+        sudo sed -i "s|^[#[:space:]]*GRUB_THEME=.*|${theme_line}|" /etc/default/grub
+    else
+        printf '\n%s\n' "$theme_line" | sudo tee -a /etc/default/grub >/dev/null
+    fi
+
+    printf "%b\n" "${BLD}${CYE}Regenerating the GRUB configuration...${CNC}"
+    if sudo grub-mkconfig -o /boot/grub/grub.cfg; then
+        printf "\n%b\n" "${BLD}${CGR}Vimix is set as the GRUB theme; it shows on the next boot.${CNC}"
+    else
+        printf "\n%b\n" "${BLD}${CRE}grub-mkconfig failed. Restore the backup before rebooting.${CNC}"
+    fi
+    printf "%b\n\n" "${BLD}${CYE}Undo:${CNC} sudo cp /etc/default/grub.bak /etc/default/grub && sudo grub-mkconfig -o /boot/grub/grub.cfg"
+    sleep 3
+}
+
 final_prompt() {
     step "Installation complete"
 
@@ -676,4 +795,5 @@ install_dotfiles
 setup_display_manager
 configure_services
 change_default_shell
+install_optional_extras
 final_prompt

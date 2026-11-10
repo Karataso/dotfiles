@@ -147,6 +147,24 @@ html, body, body > div, #background, #bg, .background {
     background-size: cover !important;
     background-position: center !important;
 }
+
+/* The theme draws the login card and its fields with square corners; the
+   desktop rounds everything, so the greeter does the same. The card is
+   found by what it contains, since every theme names it differently. */
+input, button, select, textarea,
+input[type="text"], input[type="password"], input[type="submit"] {
+    border-radius: 8px !important;
+}
+
+*:has(> input[type="password"]),
+*:has(> input[type="submit"]) {
+    border-radius: 12px !important;
+}
+
+.login-box, .login-panel, .login-card, .login-form, .login-container,
+#login, #login-box, #loginform, .login {
+    border-radius: 12px !important;
+}
 EOF
     chmod 644 "$theme_dir/dots-wallpaper.css" 2>/dev/null
 fi

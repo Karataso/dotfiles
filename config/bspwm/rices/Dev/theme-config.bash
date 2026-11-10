@@ -109,5 +109,5 @@ geany_theme="z0mbi3-OxoCarbon"
 ENGINE="Default"
 
 CUSTOM_DIR="/path/to/your/wallpapers/directory"
-DEFAULT_WALL="$HOME/.config/bspwm/rices/dev/walls/wall-07.webp"
+DEFAULT_WALL="$HOME/.config/bspwm/rices/Dev/walls/wall-07.webp"
 ANIMATED_WALL="$HOME/.config/bspwm/config/assets/animated_wall.mp4"

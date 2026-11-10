@@ -1,47 +1,47 @@
 #############################
-#		Grayscale Theme		#
+#		Sunset Theme		#
 #############################
 # Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
 # https://github.com/gh0stzk/dotfiles
 
-# (Monochrome) colorscheme
-bg="#212529"
-bg_alt="#00212529"
-fg="#f8f9fa"
-trans="#00212529"
+# (Catppuccin Mocha) colorscheme
+bg="#181825"
+bg_alt="#00181825"
+fg="#CDD6F4"
+trans="#00181825"
 
-black="#2C3136"
-red="#dee2e6"
-green="#adb5bd"
-yellow="#e9ecef"
-blue="#495057"
-magenta="#ced4da"
-cyan="#6c757d"
-white="#f8f9fa"
-blackb="#41484F"
-redb="#dee2e6"
-greenb="#adb5bd"
-yellowb="#e9ecef"
-blueb="#495057"
-magentab="#ced4da"
-cyanb="#6c757d"
-whiteb="#f8f9fa"
+black="#45475A"
+red="#F38BA8"
+green="#A6E3A1"
+yellow="#F9E2AF"
+blue="#89B4FA"
+magenta="#F5C2E7"
+cyan="#94E2D5"
+white="#BAC2DE"
+blackb="#585B70"
+redb="#F38BA8"
+greenb="#A6E3A1"
+yellowb="#F9E2AF"
+blueb="#89B4FA"
+magentab="#F5C2E7"
+cyanb="#94E2D5"
+whiteb="#A6ADC8"
 
 # Extend
-purple="#9A9EA2"
-amber="#565b61"
-pink="#c3c8cc"
-orange="#71767c"
-indigo="#636973"
-lime="#a3a9ad"
-grey="#9198a0"
-bluegray="#5f6a73"
+purple="#cba6f7"
+amber="#f0c987"
+pink="#f2cdcd"
+orange="#fab387"
+indigo="#9399b2"
+lime="#c6e6a5"
+grey="#73739c"
+bluegray="#383857"
 
-accent_color="#343a40"
+accent_color="#1e1e2e"
 arch_icon="#0f94d2"
 
 # Bar
-main_bar="bar16"
+main_bar="bar06"
 
 # Bspwm options
 BORDER_WIDTH="0"        # Bspwm border
@@ -49,8 +49,8 @@ TOP_PADDING="1"
 BOTTOM_PADDING="1"
 LEFT_PADDING="1"
 RIGHT_PADDING="1"
-NORMAL_BC="$magenta"    # Normal border color
-FOCUSED_BC="$white"     # Focused border color
+NORMAL_BC="$black"      # Normal border color
+FOCUSED_BC="$cyan"      # Focused border color
 
 # Terminal font & size
 term_font_size="10"
@@ -66,14 +66,14 @@ P_ANIMATIONS="@"		# (@ = enable) (# = disable)
 P_TERM_OPACITY="1.0"	# Terminal transparency. Range: 0.1 - 1.0 (1.0 = disabled)
 
 # Dunst
-dunst_offset='(0, 60)'
-dunst_origin='top-center'
+dunst_offset='(20, 60)'
+dunst_origin='top-right'
 dunst_transparency='0'
 dunst_corner_radius='6'
-dunst_font='Maple Mono NF Bold Italic 9'
+dunst_font='JetBrainsMono NF Medium 9'
 dunst_border='0'
-dunst_frame_color="$fg"
-dunst_icon_theme="Vimix-White"
+dunst_frame_color="$whiteb"
+dunst_icon_theme="Catppuccin-Mocha"
 # Dunst animations
 dunst_close_preset="fly-out"
 dunst_close_direction="up"
@@ -85,12 +85,12 @@ jg_bg="$bg"
 jg_fg="$fg"
 jg_sel_bg="$magenta"
 jg_sel_fg="$bg"
-jg_sep="$blackb"
+jg_sep="$black"
 
 # Rofi menu font and colors
-rofi_font="Terminess Nerd Font Mono Bold 10"
+rofi_font="JetBrainsMono NF Bold 9"
 rofi_background="$bg"
-rofi_bg_alt="$blackb"
+rofi_bg_alt="$accent_color"
 rofi_background_alt="${bg}E0"
 rofi_fg="$fg"
 rofi_selected="$magenta"
@@ -100,16 +100,16 @@ rofi_urgent="$red"
 # Screenlocker
 sl_bg="${bg}"
 sl_fg="${fg}"
-sl_ring="${blackb}"
+sl_ring="${magenta}"
 sl_wrong="${red}"
 sl_date="${fg}"
 sl_verify="${green}"
 
 # Gtk theme
-gtk_theme="MonochromeBlue-zk"
-gtk_icons="Vimix-White"
+gtk_theme="CatppuccinMocha-zk"
+gtk_icons="Catppuccin-Mocha"
 gtk_cursor="Qogirr-Dark"
-geany_theme="z0mbi3-Monochromatic"
+geany_theme="z0mbi3-CatppuccinMocha"
 
 # Wallpaper engine
 # Available engines:
@@ -121,5 +121,5 @@ geany_theme="z0mbi3-Monochromatic"
 ENGINE="Default"
 
 CUSTOM_DIR="/path/to/your/wallpapers/directory"
-DEFAULT_WALL="$HOME/.config/bspwm/rices/grayscale/walls/wall-06.webp"
+DEFAULT_WALL="$HOME/.config/bspwm/rices/Sunset/walls/wall-02.webp"
 ANIMATED_WALL="$HOME/.config/bspwm/config/assets/animated_wall.mp4"

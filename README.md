@@ -22,23 +22,25 @@ so text stays readable and nothing shifts between sessions.
 
 ## The themes
 
-The default rice is **nature**. Eight are included, all of them non-anime:
+The default rice is **Nature**. Eight are included, all of them non-anime. Nature and Nature 2 are
+siblings rather than twins: Nature is the calm, dim, low-contrast one, Nature 2 is bolder and more
+saturated.
 
-| Nature (default) | Dev |
+| Nature (default) | Nature 2 |
 |:-:|:-:|
-| <img src="config/bspwm/rices/nature/preview.webp" alt="Nature rice"> | <img src="config/bspwm/rices/dev/preview.webp" alt="Dev rice"> |
+| <img src="config/bspwm/rices/Nature/preview.webp" alt="Nature rice"> | <img src="config/bspwm/rices/Nature%202/preview.webp" alt="Nature 2 rice"> |
 
 | Cruel World | Sunset |
 |:-:|:-:|
-| <img src="config/bspwm/rices/cruel-world/preview.webp" alt="Cruel World rice"> | <img src="config/bspwm/rices/sunset/preview.webp" alt="Sunset rice"> |
+| <img src="config/bspwm/rices/Cruel%20World/preview.webp" alt="Cruel World rice"> | <img src="config/bspwm/rices/Sunset/preview.webp" alt="Sunset rice"> |
 
-| Grayscale | Silvia |
+| Dev | Grayscale |
 |:-:|:-:|
-| <img src="config/bspwm/rices/grayscale/preview.webp" alt="Grayscale rice"> | <img src="config/bspwm/rices/silvia/preview.webp" alt="Silvia rice"> |
+| <img src="config/bspwm/rices/Dev/preview.webp" alt="Dev rice"> | <img src="config/bspwm/rices/Grayscale/preview.webp" alt="Grayscale rice"> |
 
-| Isabel | h4ck3r |
+| Silvia | H4ck3r |
 |:-:|:-:|
-| <img src="config/bspwm/rices/isabel/preview.webp" alt="Isabel rice"> | <img src="config/bspwm/rices/h4ck3r/preview.webp" alt="h4ck3r rice"> |
+| <img src="config/bspwm/rices/Silvia/preview.webp" alt="Silvia rice"> | <img src="config/bspwm/rices/H4ck3r/preview.webp" alt="H4ck3r rice"> |
 
 ## What this fork changes
 
@@ -57,7 +59,7 @@ The default rice is **nature**. Eight are included, all of them non-anime:
   into `~/.config` is the one in this checkout. It also themes the LightDM greeter from the active rice,
   wallpaper included, so logging out does not change the picture.
 - **The installer has no ASCII zombie**, no duplicated dependency functions and no fixed waits between
-  packages. It prints `[n/14] step` banners, installs in four package batches and writes failed packages
+  packages. It prints `[n/15] step` banners, installs in four package batches and writes failed packages
   to `~/missing_apps.txt`.
 
 ## Features
@@ -143,7 +145,11 @@ The installer:
    `deps_aur`) — `--needed`, so anything already present is skipped,
 3. backs up existing configs to `~/.RiceBackup/<timestamp>` (optional, asked),
 4. copies `config/*` into `~/.config` and sets up the session, the greeter and MPD,
-5. offers `chsh` to zsh and a reboot.
+5. offers `chsh` to zsh,
+6. asks about two extras, both off unless you say yes: OnlyOffice, and theming the GRUB boot menu
+   with [Vimix](https://github.com/kalax2/grub2-theme-vimix) (it writes `/etc/default/grub`, keeping a
+   `.bak`, then runs `grub-mkconfig`),
+7. offers a reboot.
 
 Any package that fails twice is listed in `~/missing_apps.txt`.
 
@@ -159,6 +165,8 @@ Any package that fails twice is listed in `~/missing_apps.txt`.
   and theming modules started there, under GPL-3.0. The wiki linked from upstream still describes most of
   this tree.
 - Layouts and the rofi cheatsheet: [justaguylinux](https://codeberg.org/justaguylinux/bspwm-setup).
+- GRUB theme: [grub2-theme-vimix](https://github.com/kalax2/grub2-theme-vimix) by vinceliuice, packaged
+  by kalax2. Optional, and only copied into `/boot/grub/themes` when you ask for it.
 - Wallpaper art belongs to the artists who drew it. The walls kept here come from the upstream
   collection; the credit for each piece is the artist's, not this repository's. If you redistribute a
   wallpaper, keep its artist credit with it. Nothing here is licensed as clip art, and no anime art is

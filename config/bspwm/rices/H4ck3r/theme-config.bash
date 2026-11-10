@@ -1,47 +1,47 @@
 #############################
-#		Nature Theme		#
+#		h4ck3r Theme		#
 #############################
 # Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
 # https://github.com/gh0stzk/dotfiles
 
-# (Everforest) colorscheme
-bg="#2d353b"
-bg_alt="#00232a2e"
-fg="#d3c6aa"
-trans="#00232a2e"
+# (Hack The box) colorscheme
+bg="#0c1018"
+bg_alt="#000c1018"
+fg="#1947e0"
+trans="#000c1018"
 
-black="#475258"
-red="#e67e80"
-green="#a7c080"
-yellow="#dbbc7f"
-blue="#7fbbb3"
-magenta="#d699b6"
-cyan="#83c092"
-white="#d3c6aa"
-blackb="#475258"
-redb="#e67e80"
-greenb="#a7c080"
-yellowb="#dbbc7f"
-blueb="#7fbbb3"
-magentab="#d699b6"
-cyanb="#83c092"
-whiteb="#d3c6aa"
+black="#4A9801"
+red="#6DDE00"
+green="#00fa5c"
+yellow="#76EA00"
+blue="#578a29"
+magenta="#9cf542"
+cyan="#539e06"
+white="#00ff59"
+blackb="#03198a"
+redb="#0800ff"
+greenb="#4145b0"
+yellowb="#025dd4"
+blueb="#7eb3f7"
+magentab="#220991"
+cyanb="#3a11f0"
+whiteb="#3b5eed"
 
 # Extend
-purple="#9f85b3"
-amber="#d4a468"
-pink="#e6a0ac"
-orange="#e69875"
-indigo="#6a7ba2"
-lime="#c0ca8e"
-grey="#859289"
-bluegray="#738a8c"
+purple="#9cf542"
+amber="#FBC02D"
+pink="#FF0677"
+orange="#E57C46"
+indigo="#6C77BB"
+lime="#B9C244"
+grey="#8C8C8C"
+bluegray="#6D8895"
 
-accent_color="#404c54"
+accent_color="#1B2333"
 arch_icon="#0f94d2"
 
 # Bar
-main_bar="bar03"
+main_bar="bar08"
 
 # Bspwm options
 BORDER_WIDTH="0"		# Bspwm border
@@ -49,43 +49,43 @@ TOP_PADDING="1"
 BOTTOM_PADDING="1"
 LEFT_PADDING="1"
 RIGHT_PADDING="1"
-NORMAL_BC="$white"      # Normal border color
-FOCUSED_BC="$green"     # Focused border color
+NORMAL_BC="$black"      # Normal border color
+FOCUSED_BC="$yellow"    # Focused border color
 
 # Terminal font & size
 term_font_size="10"
 term_font_name="JetBrainsMono Nerd Font"
 
 # Picom options
-P_FADE="true"			# Fade true|false
-P_SHADOWS="true"		# Shadows true|false
+P_FADE="false"			# Fade true|false
+P_SHADOWS="false"		# Shadows true|false
 SHADOW_C="#000000"		# Shadow color
-P_CORNER_R="6"			# Corner radius (0 = disabled)
+P_CORNER_R="0"			# Corner radius (0 = disabled)
 P_BLUR="false"			# Blur true|false
-P_ANIMATIONS="@"		# (@ = enable) (# = disable)
+P_ANIMATIONS="#"		# (@ = enable) (# = disable)
 P_TERM_OPACITY="1.0"	# Terminal transparency. Range: 0.1 - 1.0 (1.0 = disabled)
 
 # Dunst
-dunst_offset='(20, 60)'
-dunst_origin='top-right'
+dunst_offset='(0, 60)'
+dunst_origin='top-center'
 dunst_transparency='0'
-dunst_corner_radius='6'
+dunst_corner_radius='0'
 dunst_font='JetBrainsMono NF Medium 9'
-dunst_border='0'
-dunst_frame_color="$green"
-dunst_icon_theme="Gruvbox-Plus-Dark"
+dunst_border='2'
+dunst_frame_color="$yellow"
+dunst_icon_theme="BeautyLine"
 # Dunst animations
 dunst_close_preset="fly-out"
-dunst_close_direction="right"
+dunst_close_direction="up"
 dunst_open_preset="fly-in"
-dunst_open_direction="right"
+dunst_open_direction="up"
 
 # Jgmenu colors
 jg_bg="$bg"
 jg_fg="$fg"
-jg_sel_bg="$black"
+jg_sel_bg="$accent_color"
 jg_sel_fg="$fg"
-jg_sep="$green"
+jg_sep="$black"
 
 # Rofi menu font and colors
 rofi_font="JetBrainsMono NF Bold 9"
@@ -95,21 +95,21 @@ rofi_background_alt="${bg}E0"
 rofi_fg="$fg"
 rofi_selected="$blue"
 rofi_active="$green"
-rofi_urgent="$red"
+rofi_urgent="$greenb"
 
 # Screenlocker
 sl_bg="${bg}"
-sl_fg="${fg}"
+sl_fg="${yellow}"
 sl_ring="${bg}"
 sl_wrong="${red}"
-sl_date="${fg}"
-sl_verify="${green}"
+sl_date="${yellow}"
+sl_verify="${yellow}"
 
 # Gtk theme
-gtk_theme="Everforest-zk"
-gtk_icons="Gruvbox-Plus-Dark"
+gtk_theme="h4ck3r-zk"
+gtk_icons="Hack"
 gtk_cursor="Qogirr-Dark"
-geany_theme="z0mbi3-EverForest"
+geany_theme="z0mbi3-HackTheBox"
 
 # Wallpaper engine
 # Available engines:
@@ -121,5 +121,5 @@ geany_theme="z0mbi3-EverForest"
 ENGINE="Default"
 
 CUSTOM_DIR="/path/to/your/wallpapers/directory"
-DEFAULT_WALL="$HOME/.config/bspwm/rices/nature/walls/wall-02.webp"
+DEFAULT_WALL="$HOME/.config/bspwm/rices/H4ck3r/walls/wall-01.webp"
 ANIMATED_WALL="$HOME/.config/bspwm/config/assets/animated_wall.mp4"
