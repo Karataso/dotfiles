@@ -20,6 +20,7 @@ window {
     anchor:                      center;
     fullscreen:                  false;
     width:                       700px;
+    border-radius:               10px;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -51,6 +52,7 @@ inputbar {
     enabled:                     true;
     spacing:                     0px;
     padding:                     0px;
+    border-radius:               10px 10px 0px 0px;
     background-color:            @selected;
     text-color:                  inherit;
     orientation:                 horizontal;
