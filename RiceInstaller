@@ -45,9 +45,9 @@ step() {
 # copy is downloaded, so the install always matches the code you are reading.
 dots_dir=$(cd "$(dirname "$0")" 2>/dev/null && pwd)
 
-deps_official="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv nano xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
+deps_official="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv nano xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
 deps_gh0stzk="gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline gh0stzk-icons-candy gh0stzk-icons-catppuccin-mocha gh0stzk-icons-dracula gh0stzk-icons-glassy gh0stzk-icons-gruvbox-plus-dark gh0stzk-icons-hack gh0stzk-icons-luv gh0stzk-icons-sweet-rainbow gh0stzk-icons-tokyo-night gh0stzk-icons-vimix-white gh0stzk-icons-zafiro gh0stzk-icons-zafiro-purple"
-deps_chaotic="i3lock-color simple-mtpfs fzf-tab-git paru-git eww-git"
+deps_chaotic="i3lock-color simple-mtpfs eww-git"
 deps_aur="xwinwrap-0.9-bin"
 
 initial_checks() {
@@ -261,7 +261,7 @@ backup_existing_config() {
     sleep 1
 
     # Dirs in ~/.config/
-    cfg_dir="bspwm cava clipcat picom rofi eww sxhkd dunst jgmenu kitty polybar geany gtk-3.0 ncmpcpp yazi zsh mpd mpv paru zathura"
+    cfg_dir="bspwm cava clipcat picom rofi eww sxhkd dunst jgmenu kitty polybar geany gtk-3.0 ncmpcpp zsh mpd mpv paru zathura"
     for cfg in $cfg_dir; do
         [ -d "$HOME/.config/$cfg" ] && mv "$HOME/.config/$cfg" "$backup_folder"
     done
@@ -289,7 +289,7 @@ install_dotfiles() {
     done
 
     # Copy files to ~/.config
-    dots_config_dir="bspwm cava clipcat dunst geany gtk-3.0 jgmenu kitty mpd mpv ncmpcpp paru systemd yazi zsh zathura"
+    dots_config_dir="bspwm cava clipcat dunst geany gtk-3.0 jgmenu kitty mpd mpv ncmpcpp paru systemd zsh zathura"
     for dots_cfg in $dots_config_dir; do
         cp -R "$dots_dir/config/$dots_cfg" "$HOME/.config/"
     done
