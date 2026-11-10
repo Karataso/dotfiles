@@ -54,7 +54,8 @@ The default rice is **nature**. Eight are included, all of them non-anime:
   window and workspace management on `super`, session control on `super + alt`, and `alt + key` acts on
   the focused window. `alt + F1` renders the cheatsheet from `sxhkdrc`, so it cannot drift.
 - **The installer installs the clone it lives in.** There is no second download; the config it copies
-  into `~/.config` is the one in this checkout. It also themes the LightDM greeter from the active rice.
+  into `~/.config` is the one in this checkout. It also themes the LightDM greeter from the active rice,
+  wallpaper included, so logging out does not change the picture.
 - **The installer has no ASCII zombie**, no duplicated dependency functions and no fixed waits between
   packages. It prints `[n/14] step` banners, installs in four package batches and writes failed packages
   to `~/missing_apps.txt`.

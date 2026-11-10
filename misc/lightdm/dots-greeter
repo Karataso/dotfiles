@@ -3,9 +3,9 @@
 #
 # Drags the login screen towards whatever the desktop looks like: it reads the
 # rice currently selected in ~/.config/bspwm/.rice, gives the GTK greeter that
-# rice's GTK/icon/cursor themes, and puts a random wallpaper from the rice's
-# walls/ on the background. Called as root from lightdm.conf's
-# greeter-setup-script, so it re-runs on every boot and every logout.
+# rice's GTK/icon/cursor themes, and puts the wallpaper the session is using on
+# the background, so logging out does not change the picture. Called as root from
+# lightdm.conf's greeter-setup-script, so it re-runs on every boot and logout.
 #
 # RiceInstaller rewrites the DOTS_HOME line below with the real home directory;
 # the greeter runs as its own user and cannot expand ~ for you.
@@ -35,14 +35,40 @@ gtk_theme=$(theme_var gtk_theme)
 gtk_icons=$(theme_var gtk_icons)
 gtk_cursor=$(theme_var gtk_cursor)
 
-walls=$(find "$rice_dir/walls" -maxdepth 1 -type f \
-    \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | sort)
-[ -n "$walls" ] || exit 0
+# The wallpaper the desktop is showing. The wallpaper module and WallSelect
+# record it there every time it changes, so the login screen matches the desktop
+wall=""
+wall_state="$DOTS_HOME/.config/bspwm/config/current_wall"
+if [ -r "$wall_state" ]; then
+    candidate=$(tr -d '\r\n' < "$wall_state" 2>/dev/null | head -c 4096)
+    if [ -n "$candidate" ] && [ -f "$candidate" ]; then
+        wall="$candidate"
+    fi
+fi
 
-if command -v shuf >/dev/null 2>&1; then
-    wall=$(printf '%s\n' "$walls" | shuf -n 1)
-else
-    wall=$(printf '%s\n' "$walls" | sed -n "$(( $(printf '%s\n' "$walls" | wc -l) ))p")
+# Nothing recorded yet (fresh install, or an animated wallpaper that cannot be
+# shown here): use the rice's configured default, expanding its theme's $HOME
+if [ -z "$wall" ]; then
+    candidate=$(theme_var DEFAULT_WALL)
+    case "$candidate" in
+        '$HOME'*) candidate="$DOTS_HOME${candidate#\$HOME}" ;;
+    esac
+    if [ -n "$candidate" ] && [ -f "$candidate" ]; then
+        wall="$candidate"
+    fi
+fi
+
+# Last resort: any picture shipped with the rice
+if [ -z "$wall" ]; then
+    walls=$(find "$rice_dir/walls" -maxdepth 1 -type f \
+        \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | sort)
+    [ -n "$walls" ] || exit 0
+
+    if command -v shuf >/dev/null 2>&1; then
+        wall=$(printf '%s\n' "$walls" | shuf -n 1)
+    else
+        wall=$(printf '%s\n' "$walls" | sed -n "$(( $(printf '%s\n' "$walls" | wc -l) ))p")
+    fi
 fi
 [ -f "$wall" ] || exit 0
 

@@ -6,6 +6,9 @@ pick_random_wall() {
 
 set_wall() {
     feh --bg-fill "$1"
+    # Remember what is actually on screen so the greeter and the locker can
+    # show the same picture instead of picking one of their own
+    printf '%s\n' "$1" > "$HOME/.config/bspwm/config/current_wall"
     WallSync &
 }
 

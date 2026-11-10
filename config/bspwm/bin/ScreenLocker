@@ -156,13 +156,21 @@ rice_lockscreen () {
     get_screen_resolution
     calculate_positions
 
-    # Current Rice
-    read -r RICE < "$HOME"/.config/bspwm/.rice
-    # Wallpapers dir
-    image_dir="$HOME/.config/bspwm/rices/${RICE}/walls"
+    # Use the wallpaper that is actually on screen, so the lock screen and the
+    # desktop are the same picture instead of two different random ones
+    lock_image=""
+    wall_state="$HOME/.config/bspwm/config/current_wall"
+    if [ -r "$wall_state" ]; then
+        candidate=$(tr -d '\r\n' < "$wall_state")
+        [ -n "$candidate" ] && [ -f "$candidate" ] && lock_image="$candidate"
+    fi
 
-    # Select random image
-    lock_image=$(find "$image_dir" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | shuf -n 1)
+    # Fall back to any image of the current rice
+    if [ -z "$lock_image" ]; then
+        read -r RICE < "$HOME"/.config/bspwm/.rice
+        image_dir="$HOME/.config/bspwm/rices/${RICE}/walls"
+        lock_image=$(find "$image_dir" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | shuf -n 1)
+    fi
 
     # If the image is *.webp convert to /tmp/lock_image.jpg
     case "$lock_image" in
@@ -199,7 +207,7 @@ case $1 in
 Note: If an option is not specified, the screen locks with a screenshot with a blur effect.
 
 Options:
-	[-r] [--rice]	Set the screen locker with a random wallpaper of the current theme.\n" ;;
+	[-r] [--rice]	Lock with the wallpaper the desktop is using.\n" ;;
     *)
         default_lockscreen ;;
 esac

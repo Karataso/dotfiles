@@ -123,4 +123,5 @@ wall_selection=$(xargs -0 basename -a < "$file_list" |
         -e 's/^ENGINE=.*/ENGINE="Default"/' \
         -e "s|^DEFAULT_WALL=.*|DEFAULT_WALL=\"$wall_dir/$wall_selection\"|" && \
     feh --bg-fill "${wall_dir}/${wall_selection}" && \
+    printf '%s\n' "${wall_dir}/${wall_selection}" > "$HOME/.config/bspwm/config/current_wall" && \
     WallSync &

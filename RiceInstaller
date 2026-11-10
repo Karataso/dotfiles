@@ -432,8 +432,8 @@ setup_display_manager() {
     # web-greeter only lives in the AUR. Building it on every install is slow
     # and, with detect_theme_errors on, it silently swaps out any theme that
     # throws, so it is used only when it is already installed. The GTK greeter
-    # is the default: it gets the active rice's GTK theme and a random
-    # wallpaper from that rice (see misc/lightdm/dots-greeter).
+    # is the default: it gets the active rice's GTK theme and the wallpaper the
+    # session is using (see misc/lightdm/dots-greeter).
     greeter_session="lightdm-gtk-greeter"
     greeter_theme_name=""
     themes_dir="/usr/share/web-greeter/themes"

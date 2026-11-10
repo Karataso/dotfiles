@@ -1597,6 +1597,7 @@ class RiceEditorApp(Gtk.Window):
                 rm -f /tmp/wall_refresh.pid;
                 random_img=$(find "$HOME/.config/bspwm/rices/{current_theme}/walls" -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) | shuf -n 1);
                 feh --bg-fill $random_img;
+                printf '%s\\n' "$random_img" > "$HOME/.config/bspwm/config/current_wall";
                 WallSync &
                 '''
             elif engine == "CustomDir":
@@ -1606,6 +1607,7 @@ class RiceEditorApp(Gtk.Window):
                 rm -f /tmp/wall_refresh.pid;
                 random_img=$(find "{entry.get_text()}" -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) | shuf -n 1);
                 feh --bg-fill "$random_img";
+                printf '%s\\n' "$random_img" > "$HOME/.config/bspwm/config/current_wall";
                 WallSync &
                 '''
             elif engine == "Default":
@@ -1614,6 +1616,7 @@ class RiceEditorApp(Gtk.Window):
                 [ -f /tmp/wall_refresh.pid ] && kill $(cat /tmp/wall_refresh.pid) 2>/dev/null;
                 rm -f /tmp/wall_refresh.pid;
                 feh --bg-fill "{entry.get_text()}";
+                printf '%s\\n' "{entry.get_text()}" > "$HOME/.config/bspwm/config/current_wall";
                 WallSync &
                 '''
             elif engine == "Animated":
@@ -1633,6 +1636,7 @@ class RiceEditorApp(Gtk.Window):
                     while true; do
                         random_img=$(find "$HOME/.config/bspwm/rices/{current_theme}/walls" -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) | shuf -n 1);
                         feh --bg-fill $random_img;
+                        printf '%s\\n' "$random_img" > "$HOME/.config/bspwm/config/current_wall";
                         WallSync &
                         sleep 900
                         WallSync &
