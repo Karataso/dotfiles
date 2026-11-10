@@ -13,7 +13,7 @@
 
 # Main vars
 cfgStyle="$HOME/.config/bspwm/config/.launcher"
-[ -f "$cfgStyle" ] || echo "1" > "$cfgStyle"
+[ -f "$cfgStyle" ] || echo "3" > "$cfgStyle"
 read -r current_style < "$cfgStyle"
 
 # Paths

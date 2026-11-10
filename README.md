@@ -106,7 +106,7 @@ Applications live on `ctrl + alt`, window and workspace management on `super`, s
 | `alt` + `space` | App launcher. |
 | `super` + `space` | Theme (rice) selector. |
 | `super` + `alt` + `space` | Bar selector. |
-| `ctrl` + `alt` + `w`<br>`ctrl` + `alt` + `e`<br>`ctrl` + `alt` + `f`<br>`ctrl` + `alt` + `m` | Browser<br>Editor<br>File manager<br>Music player |
+| `ctrl` + `alt` + `w`<br>`ctrl` + `alt` + `e`<br>`ctrl` + `alt` + `f`<br>`ctrl` + `alt` + `m` | Browser<br>File manager<br>Editor<br>Music player |
 | `ctrl` + `alt` + `s` | Takes a screenshot. |
 | `ctrl` + `alt` + `p` | Power menu. |
 | `ctrl` + `alt` + `l` | Lock the screen. |

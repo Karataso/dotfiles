@@ -115,13 +115,13 @@ super + alt + t
 ctrl + alt + w
     OpenApps --browser
 
-# Editor
+# File manager (Thunar)
 ctrl + alt + e
-    OpenApps --editor
-
-# File manager
-ctrl + alt + f
     OpenApps --filemanager
+
+# Text editor (Geany)
+ctrl + alt + f
+    OpenApps --editor
 
 # Music player (ncmpcpp)
 ctrl + alt + m
