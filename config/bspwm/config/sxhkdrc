@@ -131,10 +131,6 @@ ctrl + alt + m
 ctrl + alt + g
     OpenApps --telegram
 
-# Yazi
-ctrl + alt + y
-    OpenApps --yazi
-
 # Rice editor
 super + r
     RiceEditor

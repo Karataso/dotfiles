@@ -50,9 +50,6 @@ case "$1" in
 	--keyboard)
 		KeyBoardL
 		;;
-	--yazi)
-		kitty --name=YaziTerm --class=FloaTerm -e yazi
-		;;
 	--music)
 		kitty --name=MusicTerm --class=FloaTerm -e ncmpcpp
 		;;
