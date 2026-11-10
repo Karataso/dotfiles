@@ -54,7 +54,13 @@ case "$1" in
 		kitty --name=MusicTerm --class=FloaTerm -e ncmpcpp
 		;;
 	--fetch)
-		kitty --name=FetchTerm --class=FloaTerm -e ~/.local/bin/sysfetch
+		rice=$(tr -d '\r\n' < "$HOME/.config/bspwm/.rice" 2>/dev/null)
+		fetch_config="$HOME/.config/bspwm/rices/$rice/fastfetch.jsonc"
+		if command -v fastfetch >/dev/null 2>&1 && [ -f "$fetch_config" ]; then
+			kitty --name=FetchTerm --class=FloaTerm -e fastfetch --config "$fetch_config"
+		else
+			kitty --name=FetchTerm --class=FloaTerm -e sh -c 'printf "fastfetch is not installed, or the current rice has no fastfetch.jsonc.\n"; sleep 4'
+		fi
 		;;
 	--scratch)
 		Bspwm-ScratchPad

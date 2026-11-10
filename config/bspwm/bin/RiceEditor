@@ -520,9 +520,9 @@ class RiceEditorApp(Gtk.Window):
 
         general_frame.add(general_options_content)  # Añadir el contenido al Gtk.Frame
 
-        # Configuración de Pixel-Art on Terminal
+        # Configuración de System info on Terminal (fastfetch)
         pixel_art_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=7)
-        pixel_art_label = Gtk.Label(label="Pixel-Art on Terminal")
+        pixel_art_label = Gtk.Label(label="System info on Terminal")
         pixel_art_label.set_halign(Gtk.Align.START)
 
         self.pixel_art_switch = Gtk.Switch()
@@ -1892,27 +1892,27 @@ class RiceEditorApp(Gtk.Window):
 
     def get_pixel_art_state(self):
         """
-        Lee el estado actual de Pixel-Art on Terminal desde .zshrc.
+        Lee el estado actual de System info on Terminal (fastfetch) desde .zshrc.
         """
         zshrc_file = os.path.expanduser('~/.zshrc')
 
         try:
             with open(zshrc_file, 'r') as f:
                 for line in f:
-                    if "$HOME/.local/bin/colorscript -r" in line:
+                    if "fastfetch --config" in line:
                         return not line.strip().startswith("#")
         except FileNotFoundError:
             print(f"Archivo de configuración no encontrado: {zshrc_file}")
         except Exception as e:
-            print(f"Error al leer el estado de Pixel-Art: {e}")
+            print(f"Error al leer el estado de System info: {e}")
         return False  # Por defecto, se asume que está desactivado
 
     def on_pixel_art_switch_toggled(self, switch, state):
         """
-        Maneja los cambios en el switch de Pixel-Art on Terminal.
+        Maneja los cambios en el switch de System info on Terminal.
         """
         zshrc_file = os.path.expanduser('~/.zshrc')
-        command_line = "$HOME/.local/bin/colorscript -r"
+        command_line = "fastfetch --config"
 
         try:
             with open(zshrc_file, 'r') as f:
@@ -1932,7 +1932,7 @@ class RiceEditorApp(Gtk.Window):
             with open(zshrc_file, 'w') as f:
                 f.writelines(lines)
         except Exception as e:
-            print(f"Error al actualizar Pixel-Art on Terminal: {e}")
+            print(f"Error al actualizar System info on Terminal: {e}")
 
         return False  # Debe retornar False para que el estado del switch se actualice
 

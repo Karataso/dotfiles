@@ -88,6 +88,11 @@ saturated.
   `config/bspwm/config/modules` takes care of the rest.
 - **Zsh** without a plugin manager: completion, syntax highlighting, history substring search and fzf-tab
   previews.
+- **fastfetch instead of startup ASCII art.** Each rice carries its own fastfetch theme in
+  `rices/<rice>/fastfetch.jsonc`, so the splash follows the rice like everything else. The configs come
+  from [iamanuclearwarhead/fastfetch-configs](https://github.com/iamanuclearwarhead/fastfetch-configs)
+  (MIT, license kept in `LICENSES/fastfetch-configs`); `zfetch` in the launcher opens the current one in
+  a floating terminal.
 
 | Power menu | Screenshot |
 |:-:|:-:|
@@ -165,6 +170,8 @@ Any package that fails twice is listed in `~/missing_apps.txt`.
   and theming modules started there, under GPL-3.0. The wiki linked from upstream still describes most of
   this tree.
 - Layouts and the rofi cheatsheet: [justaguylinux](https://codeberg.org/justaguylinux/bspwm-setup).
+- fastfetch themes: [iamanuclearwarhead/fastfetch-configs](https://github.com/iamanuclearwarhead/fastfetch-configs),
+  MIT licensed. The eight configs are remapped one per rice; the author's header stays in each file.
 - GRUB theme: [grub2-theme-vimix](https://github.com/kalax2/grub2-theme-vimix) by vinceliuice, packaged
   by kalax2. Optional, and only copied into `/boot/grub/themes` when you ask for it.
 - Wallpaper art belongs to the artists who drew it. The walls kept here come from the upstream

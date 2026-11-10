@@ -160,5 +160,10 @@ alias ll='eza --icons=always --color=always -la'
 #  ┌─┐┬ ┬┌┬┐┌─┐  ┌─┐┌┬┐┌─┐┬─┐┌┬┐
 #  ├─┤│ │ │ │ │  └─┐ │ ├─┤├┬┘ │
 #  ┴ ┴└─┘ ┴ └─┘  └─┘ ┴ ┴ ┴┴└─ ┴
-$HOME/.local/bin/colorscript -r
+# System info, one fastfetch theme per rice (rices/<rice>/fastfetch.jsonc).
+# RiceEditor can turn this switch off and it comments the fastfetch line below.
+if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch_config="$HOME/.config/bspwm/rices/$(cat "$HOME/.config/bspwm/.rice" 2>/dev/null)/fastfetch.jsonc"
+    [ -f "$fastfetch_config" ] && fastfetch --config "$fastfetch_config"
+fi
 #disable-fzf-tab
