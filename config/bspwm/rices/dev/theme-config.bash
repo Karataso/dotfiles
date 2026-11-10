@@ -61,7 +61,7 @@ dunst_corner_radius='6'
 dunst_font='JetBrainsMono NF Medium 9'
 dunst_border='0'
 dunst_frame_color="$blue"
-dunst_icon_theme="Candy"
+dunst_icon_theme="Gruvbox-Plus-Dark"
 # Dunst animations
 dunst_close_preset="fly-out"
 dunst_close_direction="down"
@@ -95,7 +95,7 @@ sl_verify="${green}"
 
 # Gtk theme
 gtk_theme="OxoCarbon-zk"
-gtk_icons="Glassy"
+gtk_icons="Gruvbox-Plus-Dark"
 gtk_cursor="Qogirr-Dark"
 geany_theme="z0mbi3-OxoCarbon"
 
