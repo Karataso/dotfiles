@@ -1,3 +1,7 @@
+> This file is **upstream's** changelog: everything below was written for
+> [gh0stzk/dotfiles](https://github.com/gh0stzk/dotfiles). For what this fork
+> changes, see [README.md](README.md#what-this-fork-changes).
+
 ## Feat: New Layouts mode
 ##### 18 Oct 2026
 

@@ -2,7 +2,7 @@ The modules are loaded in lexicographical order, and I've arranged them to ensur
 
 Only files ending in .sh will be loaded; those ending in .disabled are not.
 
-For example, if you use the Xfce terminal and want its color scheme to change with the theme, you'll need to rename the file 19-xfce-terminal.disabled to 19-xfce-terminal.sh.
+For example, if you use the Xfce terminal and want its color scheme to change with the theme, you'll need to rename the file 05-xfce-terminal.disabled to 05-xfce-terminal.sh. The same goes for 09-cava.disabled.
 
 This attempts to work similarly to Matugen/Pywal, except there they're called template files, and here I've called them modules... I don't know why.
 
