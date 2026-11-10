@@ -88,11 +88,12 @@ saturated.
   `config/bspwm/config/modules` takes care of the rest.
 - **Zsh** without a plugin manager: completion, syntax highlighting, history substring search and fzf-tab
   previews.
-- **fastfetch instead of startup ASCII art.** Each rice carries its own fastfetch theme in
-  `rices/<rice>/fastfetch.jsonc`, so the splash follows the rice like everything else. The configs come
+- **fastfetch, on demand.** Each rice carries its own fastfetch theme in
+  `rices/<rice>/fastfetch.jsonc`, so it follows the rice like everything else. The configs come
   from [iamanuclearwarhead/fastfetch-configs](https://github.com/iamanuclearwarhead/fastfetch-configs)
   (MIT, license kept in `LICENSES/fastfetch-configs`); `zfetch` in the launcher opens the current one in
-  a floating terminal.
+  a floating terminal, and it stays out of the way on shell startup unless RiceEditor's
+  "System info on Terminal" switch turns it on.
 
 | Power menu | Screenshot |
 |:-:|:-:|

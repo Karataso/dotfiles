@@ -137,10 +137,11 @@ alias cat="bat --theme=base16"
 alias ls='eza --icons=always --color=always -a'
 alias ll='eza --icons=always --color=always -la'
 
-# System info, one fastfetch theme per rice (rices/<rice>/fastfetch.jsonc).
-# RiceEditor can turn this switch off and it comments the fastfetch line below.
+# System info on Terminal: off on shell startup, opened on demand by zfetch
+# in the launcher (OpenApps --fetch). RiceEditor's switch uncomments the line
+# below; its # is at column 0 because that switch toggles with lstrip("#").
 if command -v fastfetch >/dev/null 2>&1; then
     fastfetch_config="$HOME/.config/bspwm/rices/$(cat "$HOME/.config/bspwm/.rice" 2>/dev/null)/fastfetch.jsonc"
-    [ -f "$fastfetch_config" ] && fastfetch --config "$fastfetch_config"
+#    [ -f "$fastfetch_config" ] && fastfetch --config "$fastfetch_config"
 fi
 #disable-fzf-tab
