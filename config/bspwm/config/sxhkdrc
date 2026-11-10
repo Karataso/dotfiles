@@ -4,17 +4,16 @@
 #  ╚════██║ ██╔██╗ ██╔══██║██╔═██╗ ██║  ██║██╔══██╗██║
 #  ███████║██╔╝ ██╗██║  ██║██║  ██╗██████╔╝██║  ██║╚██████╗
 #  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝
-#	gh0stzk		https://github.com/gh0stzk/dotfiles
 #
-#   super + key        launch / toggle something
-#   super + alt        desktop and bspwm management
-#   super + ctrl       resize, balance, send windows
-#   super + shift      secondary actions
-#   alt + key          the focused window
+#   ctrl + alt + key     applications: launch and toggle
+#   super + key          windows and workspaces
+#   super + alt + key    session and bspwm control
+#   super + ctrl + key   resize, balance, send, multi-window
+#   alt + key            the focused window
 #
-#   Full cheat sheet: alt + F1
+#   alt + F1             the cheat sheet, generated from this file
 
-# Show help
+# Show the keybind cheat sheet
 alt + F1
     OpenApps --KeyHelp
 
@@ -25,23 +24,23 @@ super + p
     OpenApps --soundcontrol
 
 # Network manager
-super + n
+ctrl + alt + n
     OpenApps --netmanager
 
 # Bluetooth
-super + shift + b
+ctrl + alt + b
     OpenApps --bluetooth
 
 # Clipboard history
-super + c
+ctrl + alt + v
     OpenApps --clipboard
 
 # Screenshot
-super + s
+ctrl + alt + s
     OpenApps --screenshot
 
 # Keyboard layout
-super + k
+ctrl + alt + k
     OpenApps --keyboard
 
 # Wallpaper selector
@@ -49,79 +48,91 @@ super + w
     WallSelect
 
 # Mount Android phone
-super + a
+super + alt + a
     OpenApps --android
 
+# Host checks (updates, weather, system vars)
+super + alt + i
+    OpenApps --checkupdates
+
 # Lock screen
-super + l
+ctrl + alt + l
     ScreenLocker
 
-# Power menu
+# Power menu (shutdown, reboot, logout, lock)
+ctrl + alt + p
+    OpenApps --powermenu
+
+# Hardware power button
 XF86PowerOff
     OpenApps --powermenu
 
 # -- User -- #
 
 # Password manager (RofiPass)
-super + x
-    OpenApps --pass
+ctrl + alt + x
+    RofiPass
 
 # Rofi style
-super + shift + l
+super + alt + l
     RofiLauncher --choose-style
 
 # Scratchpad
-super + o
+ctrl + t
     OpenApps --scratch
 
 # Restore hidden windows
-super + h
+ctrl + alt + h
     HideNode --menu
 
 # -- Apps -- #
 
 # App launcher
-super + @space
+alt + @space
     OpenApps --menu
 
 # Terminal
-super + Return
+ctrl + alt + t
     OpenApps --terminal
 
 # Terminal (floating)
-super + shift + Return
+ctrl + alt + shift + t
     OpenApps --floating
 
-# Theme selector
-super + shift + @space
+# Theme (rice) selector
+super + @space
     RiceSelector
 
 # Bar selector
 super + alt + @space
     BarSelector
 
+# Terminal selector
+super + alt + t
+    Term --selecterm
+
 # Browser
-super + b
+ctrl + alt + w
     OpenApps --browser
 
 # Editor
-super + e
+ctrl + alt + e
     OpenApps --editor
 
 # File manager
-super + f
+ctrl + alt + f
     OpenApps --filemanager
 
-# Telegram
-super + t
-    OpenApps --telegram
-
 # Music player (ncmpcpp)
-super + m
+ctrl + alt + m
     OpenApps --music
 
+# Telegram
+ctrl + alt + g
+    OpenApps --telegram
+
 # Yazi
-super + y
+ctrl + alt + y
     OpenApps --yazi
 
 # Rice editor
@@ -153,6 +164,10 @@ super + alt + h
 # Unhide bar
 super + alt + u
     HideBar -u
+
+# Rotate the desktop
+ctrl + Tab
+    bspc node @/ --rotate 90
 
 # -- Window state -- #
 
@@ -228,9 +243,13 @@ super + alt + {Left,Down,Up,Right}
     { DIR=west FALLBACK=prev; , DIR=south; , DIR=north; , DIR=east FALLBACK=next; } \
     bspc node -f $DIR.!sticky.!hidden.local || bspc node -f $FALLBACK.leaf.!sticky.!hidden.local
 
-# Swap focused window with the one in the given direction
+# Swap the focused window with the one in the given direction
 super + shift + {Left,Down,Up,Right}
     bspc node -s {west,south,north,east}.local
+
+# Move the focused floating window
+super + alt + shift + {Left,Down,Up,Right}
+    bspc node -v {-20 0,0 20,0 -20,20 0}
 
 # Focus the last window / last workspace
 super + {comma,period}
@@ -254,10 +273,6 @@ super + ctrl + {1-9,0}
 super + ctrl + {Left,Right}
     bspc node -d {prev,next} '--follow'
 
-# Rotate the desktop 90º
-super + slash
-    bspc node @parent -R 90
-
 # -- Multi-window -- #
 
 # Close all windows on the current desktop
@@ -265,15 +280,15 @@ super + ctrl + x
     bspc query -N -d | xargs -I id -n 1 bspc node id -c
 
 # Close / kill all unfocused local windows
-super + ctrl + n ; {x,k}
+super + n ; {x,k}
     bspc query -N -n '.!focused.!marked.local.window' | xargs -I id -n 1 bspc node id {-c,-k}
 
 # Bring all marked windows to the focused desktop
-super + ctrl + n ; m
+super + n ; m
     bspc query -N -n '.marked' | xargs -I id -n 1 bspc node id -d focused --follow
 
-# Bring everything from workspace X to the current one (super + ctrl + n, then X)
-super + ctrl + n ; {1-9}
+# Bring everything from workspace X to the current one (super + n, then X)
+super + n ; {1-9}
     bspc query -N -d {1-9} -n '.window' | xargs -I id -n 1 bspc node id -d focused
 
 # -- Hardware keys -- #
@@ -292,9 +307,10 @@ XF86Audio{Next,Prev,Play,Stop}
 
 # -- Desktop menu -- #
 
-# jgmenu
+# Right click on the desktop opens jgmenu
 ~button3
     win=$(xdotool getmouselocation --shell | sed -n 's/^WINDOW=\(.*\)/\1/p'); \
     type=$(xprop -id "$win" _NET_WM_WINDOW_TYPE 2>/dev/null); \
     case "$type" in *DESKTOP*) \
-        jgmenu_run ;; esac
+        jgmenu --csv-file="$HOME/.config/bspwm/config/jgmenu.txt" \
+               --config-file="$HOME/.config/bspwm/config/jgmenurc";; esac

@@ -23,33 +23,32 @@ CBL=$(tput setaf 4)    # Blue
 BLD=$(tput bold)       # Bold
 CNC=$(tput sgr0)       # Reset colors
 
-# Logo
-logo() {
-    text="$1"
-    printf "%b" "
-               %%%
-        %%%%%//%%%%%
-      %%************%%%
-  (%%//############*****%%
- %%%%**###&&&&&&&&&###**//
- %%(**##&&&#########&&&##**
- %%(**##*****#####*****##**%%%
- %%(**##     *****     ##**
-   //##   @@**   @@   ##//
-     ##     **###     ##
-     #######     #####//
-       ###**&&&&&**###
-       &&&         &&&
-       &&&////   &&
-          &&//@@@**
-            ..***
+# Step banners: plain ASCII and colour only, so they still read on a bare tty.
+STEP=0
+TOTAL=14
 
-   ${BLD}${CRE}[ ${CYE}${text} ${CRE}]${CNC}\n\n"
+banner() {
+    clear
+    printf "%s%s============================================================%s\n" "$BLD" "$CBL" "$CNC"
+    printf "%s  %s%s\n" "$BLD" "$1" "$CNC"
+    printf "%s%s============================================================%s\n\n" "$BLD" "$CBL" "$CNC"
+}
+
+step() {
+    STEP=$((STEP + 1))
+    clear
+    printf "%s%s[%s/%s]%s %s%s%s\n" "$BLD" "$CBL" "$STEP" "$TOTAL" "$CNC" "$BLD" "$1" "$CNC"
+    printf "%s%s------------------------------------------------------------%s\n\n" "$CBL" "" "$CNC"
 }
 
 # Everything is installed from the checkout this script lives in: no second
 # copy is downloaded, so the install always matches the code you are reading.
 dots_dir=$(cd "$(dirname "$0")" 2>/dev/null && pwd)
+
+deps_official="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
+deps_gh0stzk="gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline gh0stzk-icons-candy gh0stzk-icons-catppuccin-mocha gh0stzk-icons-dracula gh0stzk-icons-glassy gh0stzk-icons-gruvbox-plus-dark gh0stzk-icons-hack gh0stzk-icons-luv gh0stzk-icons-sweet-rainbow gh0stzk-icons-tokyo-night gh0stzk-icons-vimix-white gh0stzk-icons-zafiro gh0stzk-icons-zafiro-purple"
+deps_chaotic="i3lock-color simple-mtpfs fzf-tab-git paru-git eww-git"
+deps_aur="xwinwrap-0.9-bin"
 
 initial_checks() {
     # Verificar usuario root
@@ -69,22 +68,20 @@ initial_checks() {
 }
 
 welcome() {
-    clear
-    logo "Welcome $USER"
+    banner "Welcome $USER"
 
-    printf "%b" "${BLD}${CGR}This script will install my dotfiles and this is what it will do:${CNC}
+    printf "%b" "${BLD}Installs the configuration in ${CBL}$dots_dir${CNC}${BLD} and sets this machine up to run it.${CNC}
 
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} 2 Repositories will be installed. ${CBL}gh0stzk-dotfiles${CNC} and ${CBL}Chaotic-Aur${CNC}
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Check necessary dependencies and install them
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install the configuration from this checkout
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Optional backup of possible existing configurations (bspwm, polybar, etc...)
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install my configuration
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install and enable LightDM, themed from the active rice (only if no other display manager is enabled)
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Enabling MPD service (Music player daemon)
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Change your shell to zsh shell
+${BLD}${CGR}  Repositories${CNC}   gh0stzk-dotfiles and Chaotic-AUR
+${BLD}${CGR}  Packages${CNC}       official, gh0stzk, Chaotic-AUR and AUR
+${BLD}${CGR}  Config${CNC}         copied from this checkout into ~/.config
+${BLD}${CGR}  Backup${CNC}         optional, existing configs move to ~/.RiceBackup/<date>
+${BLD}${CGR}  Login screen${CNC}   LightDM, themed from the active rice
+${BLD}${CGR}  Services${CNC}       MPD and the update timer
+${BLD}${CGR}  Shell${CNC}          zsh
 
-${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}The only system changes made are the LightDM setup (session entry, greeter config and service)${CNC}
-${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}This script does NOT have the potential power to break your system${CNC}
+${BLD}${CYE}  System changes stay in /etc/pacman.conf, /etc/lightdm, /usr/local/bin,${CNC}
+${BLD}${CYE}  /usr/share/xsessions and the enabled services.${CNC}
 
 "
 
@@ -104,8 +101,7 @@ ${BLD}${CGR}[${CRE}!${CGR}]${CNC} ${BLD}${CRE}This script does NOT have the pote
 }
 
 add_gh0stzk_repo() {
-    clear
-    logo "Add gh0stzk custom repo"
+    step "Adding the gh0stzk repository"
     repo_name="gh0stzk-dotfiles"
     sleep 2
 
@@ -124,8 +120,7 @@ add_gh0stzk_repo() {
 }
 
 add_chaotic_repo() {
-    clear
-    logo "Add chaotic-aur repository"
+    step "Adding the Chaotic-AUR repository"
     repo_chaotic="chaotic-aur"
     key_id="3056513887B78AEB"
     sleep 2
@@ -162,207 +157,59 @@ add_chaotic_repo() {
 
 }
 
-install_dependencies() {
-    clear
-    logo "Installing needed packages from official repositories..."
-    sleep 2
+# One package list goes in, one retry happens, one report comes out.
+ensure_paru() {
+    command -v paru >/dev/null 2>&1 && return
 
-    sudo pacman -Syy
-    dependencies="base-devel bat bc brightnessctl bspwm clipcat dunst eza feh fzf thunar tumbler gvfs-mtp firefox geany git imagemagick jq jgmenu kitty libwebp maim mpc mpd mpv xcolor ncmpcpp pamixer pacman-contrib papirus-icon-theme picom playerctl polybar lxsession python-gobject redshift rofi sxhkd xclip xdg-user-dirs xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xorg-xrdb yazi zsh zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-terminus-nerd ttf-ubuntu-mono-nerd webp-pixbuf-loader"
-
-    # Arrays temporales
-    failed_deps=""
-    retry_failed=""
-
-    # First pass
-    for pkg in $dependencies; do
-        sleep 0.50
-        if ! sudo pacman -S --noconfirm --needed "$pkg"; then
-            failed_deps="$failed_deps $pkg"
-        fi
-    done
-
-    # If there were failures, try again
-    if [ -n "$failed_deps" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies failed:${CYE}${failed_deps}${CNC}"
-        printf "%b\n\n" "${BLD}${CYE}Retrying installation..${CNC}"
-
-        for pkg in $failed_deps; do
-            sleep 0.50
-            if ! sudo pacman -S --noconfirm --needed "$pkg"; then
-                retry_failed="$retry_failed $pkg"
-            fi
-        done
-    fi
-
-    # Final Result
-    if [ -n "$retry_failed" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies could not be installed after two attempts:${CYE}${retry_failed}${CNC}"
-        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt ${CYE}file was created on your ${CGR}HOME ${CYE}with the list."
-        printf "The following dependencies failed, please install manually:\n%s\n" "$retry_failed" > "$HOME/missing_apps.txt"
-    else
-        if [ -z "$failed_deps" ]; then
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully.${CNC}"
-        else
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully after retry${CNC}"
-        fi
-    fi
-    sleep 3
-}
-
-install_gh0stzk_dependencies() {
-    clear
-    logo "Installing needed packages from gh0stzk repository..."
-    sleep 2
-
-    gh0stzk_dependencies="gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline gh0stzk-icons-candy gh0stzk-icons-catppuccin-mocha gh0stzk-icons-dracula gh0stzk-icons-glassy gh0stzk-icons-gruvbox-plus-dark gh0stzk-icons-hack gh0stzk-icons-luv gh0stzk-icons-sweet-rainbow gh0stzk-icons-tokyo-night gh0stzk-icons-vimix-white gh0stzk-icons-zafiro gh0stzk-icons-zafiro-purple"
-
-    # Arrays temporales
-    failed_gh0st_deps=""
-    retry_gh0st_failed=""
-
-    # First pass
-    for gh0stzk_pkg in $gh0stzk_dependencies; do
-        sleep 0.50
-        if ! sudo pacman -S --noconfirm --needed "$gh0stzk_pkg"; then
-            failed_gh0st_deps="$failed_gh0st_deps $gh0stzk_pkg"
-        fi
-    done
-
-    # If there were failures, try again
-    if [ -n "$failed_gh0st_deps" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies failed:${CYE}${failed_gh0st_deps}${CNC}"
-        printf "%b\n\n" "${BLD}${CYE}Retrying installation..${CNC}"
-
-        for gh0stzk_pkg in $failed_gh0st_deps; do
-            sleep 0.50
-            if ! sudo pacman -S --noconfirm --needed "$gh0stzk_pkg"; then
-                retry_gh0st_failed="$retry_gh0st_failed $gh0stzk_pkg"
-            fi
-        done
-    fi
-
-    # Final Result
-    if [ -n "$retry_gh0st_failed" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies could not be installed after two attempts:${CYE}${retry_gh0st_failed}${CNC}"
-        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt ${CYE}file was created on your ${CGR}HOME ${CYE}with the list."
-        printf "\nApps from gh0stzk repo\n=======================\nInstall with pacman command.\nThe following dependencies failed, please install manually:\n%s\n" "$retry_gh0st_failed" >> "$HOME/missing_apps.txt"
-    else
-        if [ -z "$failed_gh0st_deps" ]; then
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully.${CNC}"
-        else
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully after retry${CNC}"
-        fi
-    fi
-
-    sleep 3
-}
-
-install_chaotic_dependencies() {
-    clear
-    logo "Installing needed packages from chaotic repository..."
-    sleep 2
-
-    chaotic_dependencies="i3lock-color simple-mtpfs fzf-tab-git paru-git eww-git"
-
-    # Arrays temporales
-    failed_chaotic_deps=""
-    retry_chaotic_failed=""
-
-    # First pass
-    for chaotic_pkg in $chaotic_dependencies; do
-        sleep 0.50
-        if ! sudo pacman -S --noconfirm --needed "$chaotic_pkg"; then
-            failed_chaotic_deps="$failed_chaotic_deps $chaotic_pkg"
-        fi
-    done
-
-    # If there were failures, try again
-    if [ -n "$failed_chaotic_deps" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies failed:${CYE}${failed_chaotic_deps}${CNC}"
-        printf "%b\n\n" "${BLD}${CYE}Retrying installation..${CNC}"
-
-        for chaotic_pkg in $failed_chaotic_deps; do
-            sleep 0.50
-            if ! sudo pacman -S --noconfirm --needed "$chaotic_pkg"; then
-                retry_chaotic_failed="$retry_chaotic_failed $chaotic_pkg"
-            fi
-        done
-    fi
-
-    # Final Result
-    if [ -n "$retry_chaotic_failed" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies could not be installed after two attempts:${CYE}${retry_chaotic_failed}${CNC}"
-        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt ${CYE}file was created on your ${CGR}HOME ${CYE}with the list."
-        printf "\nApps from Chaotic\n=======================\nInstall with pacman command.\nThe following dependencies failed, please install manually:\n%s\n" "$retry_chaotic_failed" >> "$HOME/missing_apps.txt"
-    else
-        if [ -z "$failed_chaotic_deps" ]; then
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully.${CNC}"
-        else
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully after retry${CNC}"
-        fi
-    fi
-    sleep 3
-}
-
-install_aur_dependencies() {
-    clear
-    logo "Installing AUR dependencies..."
-    sleep 2
-
-    if ! command -v paru >/dev/null 2>&1; then
-        printf "%b\n" "${BLD}${CYE}Installing PARU${CNC}"
-        paru_build=$(mktemp -d)
-        git clone https://aur.archlinux.org/paru.git "$paru_build/paru" &&
+    printf "%b\n" "${BLD}${CYE}Installing paru...${CNC}"
+    paru_build=$(mktemp -d)
+    git clone https://aur.archlinux.org/paru.git "$paru_build/paru" &&
         ( cd "$paru_build/paru" && makepkg -si )
-        rm -rf "$paru_build"
+    rm -rf "$paru_build"
+}
+
+# install_packages <step title> <pacman|paru> <packages...>
+install_packages() {
+    step "$1"
+    manager="$2"
+    packages="$3"
+
+    if [ "$manager" = "paru" ]; then
+        command_string="paru -S --skipreview --noconfirm"
+    else
+        command_string="sudo pacman -S --noconfirm --needed"
     fi
 
-    aur_dependencies="xwinwrap-0.9-bin"
-
-    # Arrays temporales
-    failed_aur_deps=""
-    retry_aur_failed=""
-
-    # First pass
-    for aur_pkg in $aur_dependencies; do
-        sleep 0.50
-        if ! paru -S --skipreview --noconfirm "$aur_pkg"; then
-            failed_aur_deps="$failed_aur_deps $aur_pkg"
-        fi
+    failed=""
+    for package in $packages; do
+        $command_string "$package" || failed="$failed $package"
     done
 
-    # If there were failures, try again
-    if [ -n "$failed_aur_deps" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies failed:${CYE}${failed_aur_deps}${CNC}"
-        printf "%b\n\n" "${BLD}${CYE}Retrying installation..${CNC}"
-
-        for aur_pkg in $failed_aur_deps; do
-            sleep 0.50
-            if ! paru -S --skipreview --noconfirm "$aur_pkg"; then
-                retry_aur_failed="$retry_aur_failed $aur_pkg"
-            fi
+    retry_failed=""
+    if [ -n "$failed" ]; then
+        printf "\n%b\n" "${BLD}${CRE}These packages failed:${CYE}${failed}${CNC}"
+        printf "%b\n\n" "${BLD}${CYE}Retrying once...${CNC}"
+        for package in $failed; do
+            $command_string "$package" || retry_failed="$retry_failed $package"
         done
     fi
 
-    # Final Result
-    if [ -n "$retry_aur_failed" ]; then
-        printf "\n%b\n" "${BLD}${CRE}These dependencies could not be installed after two attempts:${CYE}${retry_aur_failed}${CNC}"
-        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt ${CYE}file was created on your ${CGR}HOME ${CYE}with the list."
-        printf "\nApps from AUR\n=======================\nInstall with paru command.\nThe following dependencies failed, please install manually:\n%s\n" "$retry_aur_failed" >> "$HOME/missing_apps.txt"
+    if [ -n "$retry_failed" ]; then
+        printf "\n%b\n" "${BLD}${CRE}Could not install:${CYE}${retry_failed}${CNC}"
+        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt${CNC} in ${CGR}$HOME${CYE} lists them for manual install.${CNC}"
+        {
+            printf "\n%s\n" "$1"
+            for package in $retry_failed; do printf "  %s\n" "$package"; done
+        } >> "$HOME/missing_apps.txt"
     else
-        if [ -z "$failed_aur_deps" ]; then
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully.${CNC}"
-        else
-            printf "\n%b\n" "${BLD}${CGR}All dependencies were installed successfully after retry${CNC}"
-        fi
+        printf "\n%b\n" "${BLD}${CGR}All packages installed.${CNC}"
     fi
-    sleep 3
+
+    sleep 2
 }
 
 show_source() {
-    clear
-    logo "Installing dotfiles"
+    step "Checking the source checkout"
     printf "%b\n" "${BLD}${CYE}Source: ${CBL}${dots_dir}${CNC}"
 
     if [ -d "$dots_dir/.git" ]; then
@@ -375,8 +222,7 @@ show_source() {
 }
 
 backup_existing_config() {
-    clear
-    logo "Backup files"
+    step "Backing up your configuration"
     sleep 2
 
     printf "%b" "Any existing configuration (bspwm, polybar, kitty, zsh, dunst, etc)\ncan be moved out of the way to ${CYE}~/.RiceBackup${CNC} before installing.\nSaying no leaves your files where they are: anything they share with the dots gets overwritten.\n\n"
@@ -418,8 +264,7 @@ backup_existing_config() {
 }
 
 install_dotfiles() {
-    clear
-    logo "Installing dotfiles.."
+    step "Copying the configuration"
     printf "%s%s Copying files to respective directories...%s\n\n" "$BLD" "$CBL" "$CNC"
     sleep 2
 
@@ -524,8 +369,7 @@ install_dotfiles() {
 }
 
 setup_display_manager() {
-    clear
-    logo "Configuring Display Manager"
+    step "Setting up the login screen"
     sleep 2
 
     # Never fight a display manager the user already has enabled
@@ -698,8 +542,7 @@ EOF
 }
 
 configure_services() {
-    clear
-    logo "Configuring Services"
+    step "Enabling services"
     picom_config="$HOME/.config/bspwm/config/picom/picom.conf"
     sleep 2
 
@@ -751,8 +594,7 @@ configure_services() {
 }
 
 change_default_shell() {
-    clear
-    logo "Changing default shell to zsh"
+    step "Changing the default shell to zsh"
     zsh_path=$(command -v zsh)
     sleep 2
 
@@ -775,11 +617,11 @@ change_default_shell() {
 }
 
 final_prompt() {
-    clear
-    logo "Installation Complete"
+    step "Installation complete"
 
     printf "%b\n" "${BLD}${CGR}Installation completed successfully!${CNC}"
     printf "%b\n\n" "${BLD}${CRE}You ${CBL}MUST ${CRE}restart your system to apply changes${CNC}"
+    printf "%b\n\n" "  Terminal   ${BLD}${CBL}ctrl + alt + t${CNC}\n  Launcher   ${BLD}${CBL}alt + space${CNC}\n  Cheatsheet ${BLD}${CBL}alt + F1${CNC}"
 
     while :; do
         printf "%b" "${BLD}${CYE}Reboot now?${CNC} [y/N]: "
@@ -802,10 +644,13 @@ welcome
 add_gh0stzk_repo
 add_chaotic_repo
 
-install_dependencies
-install_gh0stzk_dependencies
-install_chaotic_dependencies
-install_aur_dependencies
+step "Refreshing package databases"
+sudo pacman -Syy
+install_packages "Installing official repository packages" pacman "$deps_official"
+install_packages "Installing the gh0stzk packages" pacman "$deps_gh0stzk"
+install_packages "Installing the Chaotic-AUR packages" pacman "$deps_chaotic"
+ensure_paru
+install_packages "Installing the AUR packages" paru "$deps_aur"
 
 show_source
 

@@ -255,22 +255,27 @@ https://github.com/user-attachments/assets/79764678-c519-4a41-a333-2a862a6d10f8
 
 ## Very useful keybindigs to know...
 
+Applications live on `ctrl` + `alt`, window and workspace management on `super`, session control on `super` + `alt`, and `alt` + key applies to the focused window.
+
 | Keys | Action |
 | :-------------------: | :---------------------------------------------------------------: |
-| `super` + `x` | Close Windows |
-| `super` + `Enter`<br>`super` + `alt` + `Enter` | Open a terminal<br>Open a floating terminal. |
-| `alt` + `@space` | Display menu to select a theme. |
-| `super` + `@space` | Apps Menu. |
-| `super` + `alt` + `@space` | Bar Selector. |
-| `super` + `alt` + `w`| Opens a menu to select a wallpaper. |
+| `ctrl` + `alt` + `t`<br>`ctrl` + `alt` + `shift` + `t` | Open a terminal<br>Open a floating terminal. |
+| `alt` + `@space` | Apps menu. |
+| `super` + `@space` | Theme (rice) selector. |
+| `super` + `alt` + `@space` | Bar selector. |
+| `ctrl` + `alt` + `w`<br>`ctrl` + `alt` + `e`<br>`ctrl` + `alt` + `f`<br>`ctrl` + `alt` + `m` | Browser<br>Editor<br>File manager<br>Music player |
+| `ctrl` + `alt` + `s` | Takes a screenshot. |
+| `ctrl` + `alt` + `p` | Power menu. |
+| `ctrl` + `alt` + `l` | Lock the screen. |
+| `super` + `w` | Opens a menu to select a wallpaper. |
 | `super` + `alt` + `h`<br>`super` + `alt` + `u` | Hides bar/s<br>unhide bar/s |
-| `super` + `alt` + `s` | Takes screenshot. |
-| `ctrl` + `alt` + `[plus,minus,t]` | Changes transparency on focused window. |
-| `ctrl` + `super` + `alt` + `p`<br>`ctrl` + `super` + `alt` + `r`<br>`ctrl` + `super` + `alt` + `k` | Power off computer<br>Restart computer<br>Brute kill a window/process |
+| `alt` + `{plus,minus,0}` | Changes transparency on the focused window. |
+| `alt` + `F4`<br>`alt` + `shift` + `F4` | Close the focused window<br>Force kill the focused window |
 | `super` + `alt` + `r` | Restart bspwm. |
-| `alt` + `F1` | Show keybinds cheatsheet |
+| `super` + `Escape` | Reload the keybinds. |
+| `alt` + `F1` | Show the keybinds cheatsheet |
 
-And more.. You need to look sxhkdrc file for more, or press Alt + F1 for a cheatsheet.
+The cheatsheet is generated from `sxhkdrc`, so it always matches the bindings actually installed.
 
 ---
 
