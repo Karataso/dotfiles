@@ -155,14 +155,35 @@ ensure_paru() {
     rm -rf "$paru_build"
 }
 
-# install_packages <step title> <pacman|paru> <packages...>
+# install_packages <step title> <pacman|aur> <packages...>
 install_packages() {
     step "$1"
+    run_package_install "$@"
+}
+
+# run_package_install <title> <pacman|aur> <packages...>: same work, no banner.
+# The AUR path uses whichever helper exists (paru first, then yay) and only
+# builds paru when there is none, so a yay-only machine does not die here.
+run_package_install() {
     manager="$2"
     packages="$3"
 
-    if [ "$manager" = "paru" ]; then
-        command_string="paru -S --skipreview --noconfirm"
+    if [ "$manager" = "aur" ]; then
+        helper=$(command -v paru || command -v yay)
+        if [ -z "$helper" ]; then
+            ensure_paru
+            helper=$(command -v paru || command -v yay)
+        fi
+        if [ -z "$helper" ]; then
+            printf "\n%b\n" "${BLD}${CRE}No AUR helper (paru or yay) is installed, skipped:${CYE}${packages}${CNC}"
+            printf "%b\n\n" "${BLD}${CYE}Install paru or yay, then install them yourself.${CNC}"
+            sleep 2
+            return
+        fi
+        case "$helper" in
+            */paru) command_string="$helper -S --skipreview --needed --noconfirm" ;;
+            *)      command_string="$helper -S --needed --noconfirm" ;;
+        esac
     else
         command_string="sudo pacman -S --noconfirm --needed"
     fi
@@ -655,12 +676,7 @@ install_optional_extras() {
 
     if [ "$want_onlyoffice" = "y" ]; then
         printf "\n%b\n" "${BLD}${CYE}Installing onlyoffice-bin from the AUR...${CNC}"
-        if command -v paru >/dev/null 2>&1 &&
-            paru -S --skipreview --noconfirm onlyoffice-bin; then
-            printf "\n%b\n\n" "${BLD}${CGR}OnlyOffice installed.${CNC}"
-        else
-            printf "\n%b\n\n" "${BLD}${CRE}OnlyOffice did not install; paru's error is above.${CNC}"
-        fi
+        run_package_install "Optional extras: OnlyOffice" aur "onlyoffice-bin"
     else
         printf "\n%b\n\n" "${BLD}${CYE}No OnlyOffice.${CNC}"
     fi
@@ -777,7 +793,7 @@ install_packages "Installing official repository packages" pacman "$deps_officia
 install_packages "Installing the gh0stzk packages" pacman "$deps_gh0stzk"
 install_packages "Installing the Chaotic-AUR packages" pacman "$deps_chaotic"
 ensure_paru
-install_packages "Installing the AUR packages" paru "$deps_aur"
+install_packages "Installing the AUR packages" aur "$deps_aur"
 
 show_source
 
