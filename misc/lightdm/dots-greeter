@@ -1,0 +1,128 @@
+#!/bin/sh
+# dots-greeter - applied by LightDM before the greeter starts.
+#
+# Drags the login screen towards whatever the desktop looks like: it reads the
+# rice currently selected in ~/.config/bspwm/.rice, gives the GTK greeter that
+# rice's GTK/icon/cursor themes, and puts a random wallpaper from the rice's
+# walls/ on the background. Called as root from lightdm.conf's
+# greeter-setup-script, so it re-runs on every boot and every logout.
+#
+# RiceInstaller rewrites the DOTS_HOME line below with the real home directory;
+# the greeter runs as its own user and cannot expand ~ for you.
+
+DOTS_HOME="/home/CHANGEME"
+LIGHTDM_DIR="${DOTS_LIGHTDM_DIR:-/etc/lightdm}"
+BG_DIR="${DOTS_BG_DIR:-/usr/share/lightdm/backgrounds}"
+WEB_GREETER_THEMES="${DOTS_WEB_GREETER_THEMES:-/usr/share/web-greeter/themes}"
+
+RICES="$DOTS_HOME/.config/bspwm/rices"
+[ -d "$RICES" ] || exit 0
+
+# The rice in use, falling back to whatever rice happens to be there
+rice=$(tr -d ' \t\r\n' < "$DOTS_HOME/.config/bspwm/.rice" 2>/dev/null | head -c 64)
+if [ -z "$rice" ] || [ ! -d "$RICES/$rice" ]; then
+    rice=$(ls -1 "$RICES" 2>/dev/null | head -n 1)
+fi
+rice_dir="$RICES/$rice"
+[ -d "$rice_dir" ] || exit 0
+
+# theme-config.bash is sourced by bspwm with the user's $HOME; here we just look
+# the variables up so paths and expansions cannot leak into root's environment
+theme_var() {
+    sed -n "s/^[[:space:]]*$1=\"\([^\"]*\)\".*/\1/p" "$rice_dir/theme-config.bash" 2>/dev/null | head -n 1
+}
+gtk_theme=$(theme_var gtk_theme)
+gtk_icons=$(theme_var gtk_icons)
+gtk_cursor=$(theme_var gtk_cursor)
+
+walls=$(find "$rice_dir/walls" -maxdepth 1 -type f \
+    \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | sort)
+[ -n "$walls" ] || exit 0
+
+if command -v shuf >/dev/null 2>&1; then
+    wall=$(printf '%s\n' "$walls" | shuf -n 1)
+else
+    wall=$(printf '%s\n' "$walls" | sed -n "$(( $(printf '%s\n' "$walls" | wc -l) ))p")
+fi
+[ -f "$wall" ] || exit 0
+
+ext=$(printf '%s' "${wall##*.}" | tr 'A-Z' 'a-z')
+
+# The greeter cannot read a 0700 home, so the picture is copied somewhere shared
+mkdir -p "$BG_DIR"
+rm -f "$BG_DIR"/dots-greeter.* 2>/dev/null
+if ! cp -f "$wall" "$BG_DIR/dots-greeter.$ext" 2>/dev/null; then
+    exit 0
+fi
+chmod 644 "$BG_DIR/dots-greeter.$ext"
+bg_file="$BG_DIR/dots-greeter.$ext"
+
+# --- lightdm-gtk-greeter -----------------------------------------------------
+conf="$LIGHTDM_DIR/lightdm-gtk-greeter.conf"
+managed="background=$bg_file"
+[ -n "$gtk_theme" ] && managed="$managed
+theme-name=$gtk_theme"
+[ -n "$gtk_icons" ] && managed="$managed
+icon-theme-name=$gtk_icons"
+[ -n "$gtk_cursor" ] && managed="$managed
+cursor-theme-name=$gtk_cursor"
+
+tmp=$(mktemp) || exit 0
+printf '%s\n' "$managed" > "$tmp.managed"
+if [ -f "$conf" ]; then
+    cat "$conf" > "$tmp"
+fi
+awk -v values="$managed" '
+    BEGIN {
+        n = split(values, line, "\n")
+        for (i = 1; i <= n; i++) {
+            split(line[i], kv, "=")
+            ours[kv[1]] = 1
+        }
+    }
+    {
+        for (key in ours)
+            if ($0 ~ ("^[[:space:]]*" key "[[:space:]]*=")) next
+        print
+        if ($0 ~ /^\[greeter\][[:space:]]*$/) {
+            print values
+            done = 1
+        }
+    }
+    END {
+        if (!done) {
+            print "[greeter]"
+            print values
+        }
+    }
+' "$tmp" > "$tmp.out" &&
+    cat "$tmp.out" > "$conf" &&
+    chmod 644 "$conf"
+rm -f "$tmp" "$tmp.managed" "$tmp.out"
+
+# --- web-greeter -------------------------------------------------------------
+# Only if the theme already pulls in dots-wallpaper.css (installed alongside),
+# otherwise the stock theme keeps its own look
+theme_dir=""
+theme_name=$(sed -n 's/^[[:space:]]*theme[[:space:]]*=[[:space:]]*"\([^"]*\)".*/\1/p' \
+    "$LIGHTDM_DIR/web-greeter.toml" 2>/dev/null | head -n 1)
+[ -n "$theme_name" ] || theme_name=default
+if [ -f "$WEB_GREETER_THEMES/$theme_name/index.html" ]; then
+    theme_dir="$WEB_GREETER_THEMES/$theme_name"
+fi
+
+if [ -n "$theme_dir" ] && grep -q 'dots-wallpaper.css' "$theme_dir/index.html" 2>/dev/null; then
+    rm -f "$theme_dir"/dots-wallpaper.* 2>/dev/null
+    cp -f "$wall" "$theme_dir/dots-wallpaper.$ext" 2>/dev/null
+    chmod 644 "$theme_dir/dots-wallpaper.$ext" 2>/dev/null
+    cat > "$theme_dir/dots-wallpaper.css" <<EOF
+html, body, body > div, #background, #bg, .background {
+    background-image: url("dots-wallpaper.$ext") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+EOF
+    chmod 644 "$theme_dir/dots-wallpaper.css" 2>/dev/null
+fi
+
+exit 0

@@ -79,7 +79,7 @@ welcome() {
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install the configuration from this checkout
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Optional backup of possible existing configurations (bspwm, polybar, etc...)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install my configuration
-  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install and enable LightDM + the 'greeter' theme (only if no other display manager is enabled)
+  ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Install and enable LightDM, themed from the active rice (only if no other display manager is enabled)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Enabling MPD service (Music player daemon)
   ${BLD}${CGR}[${CYE}i${CGR}]${CNC} Change your shell to zsh shell
 
@@ -573,57 +573,38 @@ setup_display_manager() {
         return
     fi
 
-    # web-greeter only lives in the AUR, so paru builds it. If that fails, fall
-    # back to the GTK greeter instead of leaving you without a login screen.
+    # web-greeter only lives in the AUR. Building it on every install is slow
+    # and, with detect_theme_errors on, it silently swaps out any theme that
+    # throws, so it is used only when it is already installed. The GTK greeter
+    # is the default: it gets the active rice's GTK theme and a random
+    # wallpaper from that rice (see misc/lightdm/dots-greeter).
     greeter_session="lightdm-gtk-greeter"
     greeter_theme_name=""
     themes_dir="/usr/share/web-greeter/themes"
-    printf "%b\n" "${BLD}${CYE}Installing the web greeter (AUR build, this can take a while)...${CNC}"
-    if command -v paru >/dev/null 2>&1 && paru -S --noconfirm --needed web-greeter; then
+    if pacman -Q web-greeter >/dev/null 2>&1; then
         greeter_session="web-greeter"
-
-        # Use the theme that ships with web-greeter. A copy of our own theme is
-        # pointless here: it only adds a second theme to keep in sync, and a
-        # theme that throws a JS error makes web-greeter fall back to the
-        # default one anyway (detect_theme_errors = true).
         greeter_theme_name="default"
         if [ ! -d "$themes_dir/default" ]; then
             greeter_theme_name=$(find "$themes_dir" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort | head -n 1)
         fi
-
-        if [ -z "$greeter_theme_name" ]; then
-            printf "%b\n" "${BLD}${CRE}No themes in ${themes_dir}. Using web-greeter's built-in default.${CNC}"
-            greeter_theme_name="default"
-        else
-            theme_index="$themes_dir/$greeter_theme_name/index.html"
-            printf "%b\n" "${BLD}${CYE}Using the ${CBL}${greeter_theme_name}${CYE} theme, without a background image...${CNC}"
-
-            # Same file means no duplicate work on a re-run
-            if [ -f "$theme_index" ] && ! grep -q 'dots-no-background' "$theme_index"; then
-                patched=$(mktemp)
-                awk '
-                    /<\/head>/ && !done {
-                        print "<style id=\"dots-no-background\">"
-                        print "html, body, body > div, #background, #bg, .background {"
-                        print "  background-image: none !important;"
-                        print "  background-color: #161616 !important;"
-                        print "}"
-                        print "</style>"
-                        done = 1
-                    }
-                    { print }
-                ' "$theme_index" > "$patched" &&
-                    sudo cp "$patched" "$theme_index"
-                rm -f "$patched"
-            fi
-        fi
+        [ -n "$greeter_theme_name" ] || greeter_theme_name="default"
+        printf "%b\n" "${BLD}${CYE}web-greeter is installed, using its ${CBL}${greeter_theme_name}${CYE} theme.${CNC}"
     else
-        printf "%b\n" "${BLD}${CRE}web-greeter could not be installed. Falling back to the GTK greeter.${CNC}"
+        printf "%b\n" "${BLD}${CYE}Using the GTK greeter, themed from the active rice...${CNC}"
         if ! sudo pacman -S --noconfirm --needed lightdm-gtk-greeter; then
             printf "\n%b\n\n" "${BLD}${CRE}Failed to install a greeter. Skipping LightDM configuration.${CNC}"
             sleep 3
             return
         fi
+    fi
+
+    # LightDM runs this before every greeter, so the login screen follows the
+    # rice you are using instead of whatever was picked at install time
+    printf "%b\n" "${BLD}${CYE}Installing the greeter setup script...${CNC}"
+    if sudo install -m 755 "$dots_dir/misc/lightdm/dots-greeter" /usr/local/bin/dots-greeter; then
+        sudo sed -i "s|^DOTS_HOME=.*|DOTS_HOME=\"$HOME\"|" /usr/local/bin/dots-greeter
+    else
+        printf "%b\n" "${BLD}${CRE}Could not install the greeter script, the login screen will keep its default look.${CNC}"
     fi
 
     # Register the bspwm session so the greeter can start it
@@ -663,6 +644,7 @@ EOF
 
         set_lightdm_option greeter-session "$greeter_session" force
         set_lightdm_option user-session bspwm
+        set_lightdm_option greeter-setup-script /usr/local/bin/dots-greeter
     else
         printf "%b\n" "${BLD}${CRE}LightDM config not found: ${CYE}${lightdm_conf}${CNC}"
     fi
@@ -686,7 +668,27 @@ EOF
         fi
     fi
 
-    # Enable the service and boot into a graphical login by default
+    # Hook for the greeter script. It rewrites this stylesheet and the image
+    # it points at on every boot, so the link only has to be added once.
+    if [ "$greeter_session" = "web-greeter" ] && [ -n "$greeter_theme_name" ]; then
+        theme_index="$themes_dir/$greeter_theme_name/index.html"
+        if [ -f "$theme_index" ] && ! grep -q 'dots-wallpaper.css' "$theme_index"; then
+            patched=$(mktemp)
+            awk '
+                /<\/head>/ && !done {
+                    print "<link rel=\"stylesheet\" href=\"dots-wallpaper.css\" id=\"dots-wallpaper\">"
+                    done = 1
+                }
+                { print }
+            ' "$theme_index" > "$patched" &&
+                sudo cp "$patched" "$theme_index"
+            rm -f "$patched"
+        fi
+    fi
+
+    # Paint the login screen now too, so it looks right before the first boot
+    sudo /usr/local/bin/dots-greeter 2>/dev/null
+
     printf "%b\n" "${BLD}${CYE}Enabling LightDM...${CNC}"
     sudo systemctl enable lightdm.service
     sudo systemctl set-default graphical.target
