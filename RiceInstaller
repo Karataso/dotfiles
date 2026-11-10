@@ -186,25 +186,37 @@ install_packages() {
     done
 
     retry_failed=""
+    reasons_file=$(mktemp)
+    package_log=$(mktemp)
     if [ -n "$failed" ]; then
         printf "\n%b\n" "${BLD}${CRE}These packages failed:${CYE}${failed}${CNC}"
         printf "%b\n\n" "${BLD}${CYE}Retrying once...${CNC}"
         for package in $failed; do
-            $command_string "$package" || retry_failed="$retry_failed $package"
+            if ! $command_string "$package" >"$package_log" 2>&1; then
+                retry_failed="$retry_failed $package"
+                reason=$(grep -m1 -E '^error:|^:: |conflicting files|failed to' "$package_log" | cut -c1-180)
+                [ -n "$reason" ] || reason=$(tail -n 1 "$package_log" | cut -c1-180)
+                printf '%s\t%s\n' "$package" "$reason" >> "$reasons_file"
+            fi
         done
     fi
 
     if [ -n "$retry_failed" ]; then
         printf "\n%b\n" "${BLD}${CRE}Could not install:${CYE}${retry_failed}${CNC}"
-        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt${CNC} in ${CGR}$HOME${CYE} lists them for manual install.${CNC}"
+        printf "%b\n\n" "${BLD}${CBL}missing_apps.txt${CNC} in ${CGR}$HOME${CYE} lists them, with pacman's reason, for manual install.${CNC}"
         {
             printf "\n%s\n" "$1"
-            for package in $retry_failed; do printf "  %s\n" "$package"; done
+            for package in $retry_failed; do
+                printf "  %s\n" "$package"
+                reason=$(awk -F'\t' -v p="$package" '$1 == p { print $2 }' "$reasons_file")
+                [ -n "$reason" ] && printf "    %s\n" "$reason"
+            done
         } >> "$HOME/missing_apps.txt"
     else
         printf "\n%b\n" "${BLD}${CGR}All packages installed.${CNC}"
     fi
 
+    rm -f "$reasons_file" "$package_log"
     sleep 2
 }
 
@@ -552,9 +564,14 @@ configure_services() {
         sudo systemctl disable --now mpd.service
     fi
 
-    # User-level MPD Service
-    printf "%b\n" "${BLD}${CYE}Enabling user MPD service...${CNC}"
-    systemctl --user enable --now mpd.service
+    # User-level MPD Service (skipped when the package did not install)
+    if command -v mpd >/dev/null 2>&1; then
+        printf "%b\n" "${BLD}${CYE}Enabling user MPD service...${CNC}"
+        systemctl --user enable --now mpd.service
+    else
+        printf "%b\n" "${BLD}${CRE}mpd is not installed, skipping its service.${CNC}"
+        printf "%b\n" "${BLD}${CYE}See ~/missing_apps.txt, then enable it after installing mpd.${CNC}"
+    fi
 
     # User-level ArchUpdates
     printf "%b\n" "${BLD}${CYE}Enabling user ArchUpdates service...${CNC}"
