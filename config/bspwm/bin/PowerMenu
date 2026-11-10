@@ -1,15 +1,6 @@
 #!/bin/sh
-# =============================================================
-# Author: gh0stzk
-# Repo: https://github.com/gh0stzk/dotfiles
-# Date: 2024-02-22
-#
-# Script Name: PowerMenu
 # Description: Minimalist system power control menu for bspwm
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 _options="󰍁|Lock
 |Suspend

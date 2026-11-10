@@ -1,8 +1,5 @@
-#############################
-#		Sunset Theme		#
-#############################
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# https://github.com/gh0stzk/dotfiles
+# Sunset theme: colours sourced by Theme.sh.
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # (Catppuccin Mocha) colorscheme
 bg="#181825"

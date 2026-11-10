@@ -1,36 +1,20 @@
 #!/bin/sh
-# =============================================================
-#  ██████╗ ███████╗██████╗ ██╗    ██╗███╗   ███╗██████╗  ██████╗
-#  ██╔══██╗██╔════╝██╔══██╗██║    ██║████╗ ████║██╔══██╗██╔════╝
-#  ██████╔╝███████╗██████╔╝██║ █╗ ██║██╔████╔██║██████╔╝██║
-#  ██╔══██╗╚════██║██╔═══╝ ██║███╗██║██║╚██╔╝██║██╔══██╗██║
-#  ██████╔╝███████║██║     ╚███╔███╔╝██║ ╚═╝ ██║██║  ██║╚██████╗
-#  ╚═════╝ ╚══════╝╚═╝      ╚══╝╚══╝ ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝
-# Author:  gh0stzk
-# Repo:    https://github.com/gh0stzk/dotfiles
-# Date:    24.04.2025 20:37:31
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# =============================================================
+# bspwm session: monitors, settings, keybinds, theme, bars.
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # Set environment variables
 export PATH="$HOME/.config/bspwm/bin:$PATH"
 export XDG_CURRENT_DESKTOP='bspwm'
-## Fix java applications
+# Fix java applications
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-#  ╦ ╦╔═╗╦═╗╦╔═╔═╗╔═╗╔═╗╔═╗╔═╗╔═╗
-#  ║║║║ ║╠╦╝╠╩╗╚═╗╠═╝╠═╣║  ║╣ ╚═╗
-#  ╚╩╝╚═╝╩╚═╩ ╩╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
-
+# Monitors
 bspc config remove_disabled_monitors true
 bspc config remove_unplugged_monitors true
 bspc config merge_overlapping_monitors true
 MonitorSetup
 
-#  ╔╗ ╔═╗╔═╗╦ ╦╔╦╗  ╔═╗╔═╗╔╗╔╔═╗╦╔═╗
-#  ╠╩╗╚═╗╠═╝║║║║║║  ║  ║ ║║║║╠╣ ║║ ╦
-#  ╚═╝╚═╝╩  ╚╩╝╩ ╩  ╚═╝╚═╝╝╚╝╚  ╩╚═╝
-
+# Settings
 bspc config external_rules_command "${HOME}"/.config/bspwm/bin/ExternalRules
 
 bspc config window_gap                5
@@ -50,10 +34,7 @@ bspc config pointer_action1           move
 bspc config pointer_action2           resize_side
 bspc config pointer_action3           resize_corner
 
-#  ╔═╗╦ ╦╔╦╗╔═╗╔═╗╔╦╗╔═╗╦═╗╔╦╗
-#  ╠═╣║ ║ ║ ║ ║╚═╗ ║ ╠═╣╠╦╝ ║
-#  ╩ ╩╚═╝ ╩ ╚═╝╚═╝ ╩ ╩ ╩╩╚═ ╩
-
+# Autostart
 run() {
   if ! pidof -q "$1"; then
     "$@" &

@@ -1,21 +1,12 @@
 #!/bin/sh
-# =============================================================
-# Author: gh0stzk
-# Repo:   https://github.com/gh0stzk/dotfiles
-# Date:   06.04.2025 09:41:28
-#
 # Updates - Script to check for new updates in ARCH and AUR
-#           and sync updates module in polybar/Eww.
+# and sync updates module in polybar/Eww.
 # Features:
-#   ✔ Shows the number of updates available in polybar/eww
-#   ✔ Used in a pacman hook to update the polybar-module/eww-poll. --sync-polybar
-#
+# ✔ Shows the number of updates available in polybar/eww
+# ✔ Used in a pacman hook to update the polybar-module/eww-poll. --sync-polybar
 # Dependencies:
-#   → pacman-contrib, paru, polybar
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# → pacman-contrib, paru, polybar
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 UPDATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/Updates.txt"
 

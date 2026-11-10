@@ -1,10 +1,6 @@
 #!/bin/sh
-# =============================================================
 # Script to control my eww widget arirplane options.
-# gh0stzk | https://github.com/gh0stzk/dotfiles
-# 12.07.2024 10:12:26
-# Copyright (C) 2021-2025 gh0stzk <z0mbi3.zk@protonmail.com>
-# =============================================================
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 cache_dir="$HOME/.cache/$USER"
 cache_file="$cache_dir/airplane_state"

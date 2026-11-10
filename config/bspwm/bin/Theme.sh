@@ -1,19 +1,7 @@
 #!/bin/sh
-# =============================================================
-#  ████████╗██╗  ██╗███████╗███╗   ███╗███████╗
-#  ╚══██╔══╝██║  ██║██╔════╝████╗ ████║██╔════╝
-#     ██║   ███████║█████╗  ██╔████╔██║█████╗
-#     ██║   ██╔══██║██╔══╝  ██║╚██╔╝██║██╔══╝
-#     ██║   ██║  ██║███████╗██║ ╚═╝ ██║███████╗
-#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝
-# Author: gh0stzk
-# Repo:   https://github.com/gh0stzk/dotfiles
-# Date:   10.11.2025
-# Info:   This file will configure and launch the rice.
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# Loads the current rice: colours, wallpaper, bars, picom, gtk, rofi.
+# This file will configure and launch the rice.
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # Current Rice
 read -r RICE < "$HOME"/.config/bspwm/.rice

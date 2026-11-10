@@ -1,10 +1,6 @@
 #!/bin/sh
-# =============================================================
 # Script to toogle redshift in my eww widget.
-# gh0stzk | https://github.com/gh0stzk/dotfiles
-# 11.07.2024 13:24:18
-# Copyright (C) 2021-2025 gh0stzk <z0mbi3.zk@protonmail.com>
-# =============================================================
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 cache_file=$HOME/.cache/$(whoami)/redshift_state
 
@@ -38,4 +34,3 @@ case $1 in
     state) get_state ;;
     toggle) toggle ;;
 esac
-

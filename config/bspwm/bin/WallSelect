@@ -1,8 +1,5 @@
 #!/bin/sh
-# =============================================================
-# Author:  gh0stzk
-# Repo:    https://github.com/gh0stzk/dotfiles
-# Date:    27.06.2025 11:43:32
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # WallSelect - Dynamic wallpaper selector with intelligent caching system
 # Features:
@@ -18,9 +15,6 @@
 #   → Media: feh, imagemagick
 #   → GNU: findutils, coreutils
 #
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
 
 # Set some variables
 read -r current_rice <"$HOME"/.config/bspwm/.rice

@@ -1,19 +1,6 @@
 #!/bin/sh
-#  ██████╗ ██╗ ██████╗███████╗    ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗
-#  ██╔══██╗██║██╔════╝██╔════╝    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
-#  ██████╔╝██║██║     █████╗      ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
-#  ██╔══██╗██║██║     ██╔══╝      ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
-#  ██║  ██║██║╚██████╗███████╗    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
-#  ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝    ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
-#
-#	Author	-	gh0stzk
-#	Repo	-	https://github.com/gh0stzk/dotfiles
-#	Last updated	-	24.03.2025 08:58:16
-#
-#	RiceInstaller - Script to install my dotfiles
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
+# RiceInstaller - Script to install my dotfiles
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # Colors
 CRE=$(tput setaf 1)    # Red
@@ -346,7 +333,6 @@ install_dotfiles() {
     # of leaving dead art in ~/.local on an upgrade
     rm -rf "$HOME/.local/share/asciiart"
     rm -f "$HOME/.local/bin/colorscript" "$HOME/.local/bin/sysfetch"
-
 
     # Copy remaining files
     dots_home_dir=".icons .zshrc .gtkrc-2.0"

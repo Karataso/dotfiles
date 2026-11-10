@@ -1,24 +1,15 @@
 #!/bin/sh
-# =============================================================
-# Author:  gh0stzk
-# Repo:    https://github.com/gh0stzk/dotfiles
-# Date:    21.08.2026
-#
 # Weather - Weather Monitor for Polybar/Eww
 # Features:
-#   ✔ Automatic location detection via IP geolocation
-#     (multi-provider fallback, cached to avoid rate limits)
-#   ✔ Manual coordinate override for inaccurate ISP geolocation
-#   ✔ Obtaining data in real time via API
-#   ✔ Support for Celsius and Fahrenheit formats
-#
+# ✔ Automatic location detection via IP geolocation
+# (multi-provider fallback, cached to avoid rate limits)
+# ✔ Manual coordinate override for inaccurate ISP geolocation
+# ✔ Obtaining data in real time via API
+# ✔ Support for Celsius and Fahrenheit formats
 # Dependencies:
-#   → Core: jq, curl
-#   → Optionals: Polybar, Eww
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# → Core: jq, curl
+# → Optionals: Polybar, Eww
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # ===== Configuration =====
 KEY="8b05d62206f459e1d298cbe5844d7d87"

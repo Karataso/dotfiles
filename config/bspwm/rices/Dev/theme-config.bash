@@ -1,8 +1,5 @@
-#############################
-#		Dev Theme			#
-#############################
-# Copyright (C) 2021-2025 gh0stzk <z0mbi3.zk@protonmail.com>
-# https://github.com/gh0stzk/dotfiles
+# Dev theme: colours sourced by Theme.sh.
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # (OxoCarbon) colorscheme
 bg="#161616"

@@ -1,8 +1,5 @@
-#############################
-#		Cruel World Theme		#
-#############################
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# https://github.com/gh0stzk/dotfiles
+# Cruel World theme: colours sourced by Theme.sh.
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # (Kanagawa Dragon) colorscheme
 bg="#181616"

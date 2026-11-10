@@ -31,7 +31,6 @@ error=red_color
 
 
 # Editor styles
-#------------------------------------
 
 selection=bg_color;purple_color;true;true
 current_line=;cl_color;true
@@ -50,7 +49,6 @@ white_space=indent_guide
 
 
 # Programming languages
-#------------------------------------
 
 comment=comment_color
 comment_doc=comment
@@ -100,7 +98,6 @@ other=default
 
 
 # Markup-type languages
-#------------------------------------
 
 tag=type
 tag_unknown=tag,bold
@@ -112,7 +109,6 @@ entity=default
 
 
 # Diff
-#------------------------------------
 
 line_added=0x859900
 line_removed=0xdc322f

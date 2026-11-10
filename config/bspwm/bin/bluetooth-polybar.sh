@@ -1,24 +1,14 @@
 #!/bin/sh
-# =============================================================
-# Author: gh0stzk
-# Date:   02.02.2025 13:06:58
-# Repo:   https://github.com/gh0stzk/dotfiles
-#
 # Bluetooth Status Checker for Polybar
-#
 # Checks Bluetooth hardware presence, service status, and power state to display
 # appropriate colored icon in Polybar. Optimized for reliability and performance.
-#
 # Features:
 # - Single-pass config file parsing
 # - Hardware presence validation
 # - Service status checks with systemd
 # - Graceful error handling for missing configs
 # - Efficient command execution
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# ----------------------------------------------------------------------------
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # Hardware Validation
 BT_CLASS_PATH="/sys/class/bluetooth"

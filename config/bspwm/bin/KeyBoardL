@@ -1,20 +1,12 @@
 #!/bin/sh
-# =============================================================
-# Author: gh0stzk | https://github.com/gh0stzk/dotfiles
-# Date: 23.04.2025 08:33:18
-#
-# Script Name: Keyboard Layout Switcher
 # Description: rofi + setxkbmap layout picker. The chosen layout is written to
-#              config/kb_layout, and bspwmrc re-applies it on every login, so a
-#              layout survives logout, reboot and theme switches.
+# config/kb_layout, and bspwmrc re-applies it on every login, so a
+# layout survives logout, reboot and theme switches.
 # Features:
-#   - Layouts with the international variants (dead keys, AltGr symbols)
-#   - Rofi-driven interactive menu
-#   - Real-time current layout display
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# - Layouts with the international variants (dead keys, AltGr symbols)
+# - Rofi-driven interactive menu
+# - Real-time current layout display
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 KB_CONF="$HOME/.config/bspwm/config/kb_layout"
 

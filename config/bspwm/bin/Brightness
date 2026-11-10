@@ -1,22 +1,13 @@
 #!/bin/sh
-# =============================================================
-# Author:  gh0stzk
-# Repo:    https://github.com/gh0stzk/dotfiles
-# Date:    03.02.2025 14:22:32
-#
 # Brightness - Hardware brightness control
 # Features:
-#   ✔ Brightness adjustments in 5% increments
-#   ✔ Configurable minimum of 2% brightness
-#   ✔ OSD notifications with graphical progress bar
-#
+# ✔ Brightness adjustments in 5% increments
+# ✔ Configurable minimum of 2% brightness
+# ✔ OSD notifications with graphical progress bar
 # Dependencies:
-#   → brightnessctl
-#   → dunst
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# → brightnessctl
+# → dunst
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 DIR="$HOME/.config/bspwm/config/assets"
 BRIGHTNESS_STEPS=5

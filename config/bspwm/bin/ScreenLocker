@@ -1,21 +1,12 @@
 #!/bin/sh
-# =============================================================
-# Author: gh0stzk
-# Repo:   https://github.com/gh0stzk/dotfiles
-# Date:   23.04.2025
-#
-# Script Name: ScreenLocker
 # Description: Advanced screen locker with blur effect and theme-based wallpapers
 # Features:
-#   - Dynamic blur effect on screenshot
-#   - Themed lockscreen wallpapers
-#   - Customizable colors and fonts
-#   - Multiple image format support (JPG/PNG/WEBP)
-#   - Adaptive to screen resolution (Bye bye hardcoded values!)
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# - Dynamic blur effect on screenshot
+# - Themed lockscreen wallpapers
+# - Customizable colors and fonts
+# - Multiple image format support (JPG/PNG/WEBP)
+# - Adaptive to screen resolution (Bye bye hardcoded values!)
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 TEMP_IMAGE="/tmp/i3lock.jpg"
 TEMP_LAYOUT="/tmp/lockerpreviouskeymap"

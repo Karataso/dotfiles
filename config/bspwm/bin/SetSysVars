@@ -1,25 +1,17 @@
 #!/bin/sh
-# =============================================================
-# Author:  gh0stzk
-# Repo:    https://github.com/gh0stzk/dotfiles
-# Date:    02.02.2025 08:44:12
-#
 # SetSysVars - Automated System Configuration for BSPWM
 # Features:
-#   ✔ Sets up variables for Polybar integration.
-#      * Sets up network interface (re-detected on every run,
-#        since it can change between machines/sessions: wifi
-#        vs ethernet, docking station, etc.)
-#      * Sets up graphics card (detected once, cached)
-#      * Sets up power supply (detected once, cached)
-#   ✔ Creates a lock file after first execution of the static
-#     (hardware) detection only. Network detection always runs.
+# ✔ Sets up variables for Polybar integration.
+# * Sets up network interface (re-detected on every run,
+# since it can change between machines/sessions: wifi
+# vs ethernet, docking station, etc.)
+# * Sets up graphics card (detected once, cached)
+# * Sets up power supply (detected once, cached)
+# ✔ Creates a lock file after first execution of the static
+# (hardware) detection only. Network detection always runs.
 # Dependencies:
-#   → Core: awk, grep, sed, iproute2 (All in Arch base)
-#
-# Copyright (C) 2021-2026 gh0stzk <z0mbi3.zk@protonmail.com>
-# Licensed under GPL-3.0 license
-# =============================================================
+# → Core: awk, grep, sed, iproute2 (All in Arch base)
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 CONFIG_FILE="$HOME/.config/bspwm/config/system.ini"
 SFILE="$HOME/.config/bspwm/config/.sys"

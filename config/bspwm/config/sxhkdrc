@@ -1,17 +1,11 @@
-#  ███████╗██╗  ██╗██╗  ██╗██╗  ██╗██████╗ ██████╗  ██████╗
-#  ██╔════╝╚██╗██╔╝██║  ██║██║ ██╔╝██╔══██╗██╔══██╗██╔════╝
-#  ███████╗ ╚███╔╝ ███████║█████╔╝ ██║  ██║██████╔╝██║
-#  ╚════██║ ██╔██╗ ██╔══██║██╔═██╗ ██║  ██║██╔══██╗██║
-#  ███████║██╔╝ ██╗██║  ██║██║  ██╗██████╔╝██║  ██║╚██████╗
-#  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝
-#
-#   ctrl + alt + key     applications: launch and toggle
-#   super + key          windows and workspaces
-#   super + alt + key    session and bspwm control
-#   super + ctrl + key   resize, balance, send, multi-window
-#   alt + key            the focused window
-#
-#   alt + F1             the cheat sheet, generated from this file
+# Keybinds, read by sxhkd. alt + F1 shows the sheet.
+# ctrl + alt + key     applications: launch and toggle
+# super + key          windows and workspaces
+# super + alt + key    session and bspwm control
+# super + ctrl + key   resize, balance, send, multi-window
+# alt + key            the focused window
+# alt + F1             the cheat sheet, generated from this file
+# gh0stzk — GPL-3.0 | https://github.com/gh0stzk/dotfiles
 
 # Show the keybind cheat sheet
 alt + F1
