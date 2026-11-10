@@ -75,8 +75,11 @@ The default rice is **nature**. Eight are included, all of them non-anime:
   animations, wallpaper engine) so you do not have to edit bash to change a corner radius.
 - **Scratchpad** — `ctrl + t` drops a terminal over whatever you are doing and puts it away again.
 - **Rofi applets** — app launcher, theme/rice selector, bar selector, wallpaper selector, network
-  manager, bluetooth, clipboard history, screenshot, power menu, keyboard layout, Android MTP mount,
-  password manager (`pass`), tab switcher and launcher style selector.
+  manager, bluetooth, clipboard history, screenshot, power menu, Android MTP mount, password manager
+  (`pass`), tab switcher and launcher style selector.
+- **Keyboard layout with real variants** — `ctrl + alt + k` offers US, Latin American and European
+  layouts including the international variants with dead keys and AltGr symbols. The choice is saved and
+  re-applied on login, not lost at logout.
 - **Theming modules** for picom, bspwm, polybar, wallpaper, GTK 3, dunst, rofi, kitty, eww, jgmenu,
   geany, i3lock-color, mpv and zathura. The cava module ships disabled; the module loader in
   `config/bspwm/config/modules` takes care of the rest.

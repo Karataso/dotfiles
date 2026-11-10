@@ -63,6 +63,18 @@ run() {
 # Set system vars for polybar
 "$HOME"/.config/bspwm/bin/SetSysVars
 
+# Keyboard layout picked in the layout applet (ctrl + alt + k). The applet
+# writes "layout [variant]" to kb_layout; without it we fall back to us.
+kb_conf="$HOME/.config/bspwm/config/kb_layout"
+if [ -r "$kb_conf" ]; then
+  set -- $(cat "$kb_conf")
+  kb_args="-layout $1"
+  [ -n "$2" ] && kb_args="$kb_args -variant $2"
+  setxkbmap $kb_args 2>/dev/null
+else
+  setxkbmap -layout us 2>/dev/null
+fi
+
 # Launch sxhkd with the keybinds from this tree. A leftover instance (an old
 # session, an autostart entry) would keep its own bindings and run() would skip
 # starting ours, so stop anything already listening first.
