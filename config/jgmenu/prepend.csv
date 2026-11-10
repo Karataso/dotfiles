@@ -19,14 +19,14 @@ BSPWM,^checkout(wm),gnome-windows
 Exit,^checkout(exit),system-shutdown
 
 ^tag(rices)
-Brenda,echo brenda > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Cynthia,echo cynthia > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Daniela,echo daniela > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
+Nature,echo nature > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
+Cruel World,echo cruel-world > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
+Dev,echo dev > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
+Grayscale,echo grayscale > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 h4ck3r,echo h4ck3r > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Isabel,echo isabel > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Pamela,echo pamela > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 Silvia,echo silvia > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
-Varinka,echo varinka > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
+Sunset,echo sunset > ~/.config/bspwm/.rice ; ~/.config/bspwm/bin/Theme.sh,colors
 ^sep()
 
 ^tag(wg)

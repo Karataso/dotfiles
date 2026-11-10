@@ -156,38 +156,21 @@ Optimized, native ZSH configuration. Not __Oh-My-Zsh__ or other bloated plugin m
 
 ### 🎨 The themes
 
-| Cynthia |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/5df45139-1d73-4f5f-8e8d-a417c86bfb96" alt="Cynthia Rice" align="center"> |
+| Nature | Dev |
+|:-:|:-:|
+| <img src="config/bspwm/rices/nature/preview.webp" alt="Nature rice"> | <img src="config/bspwm/rices/dev/preview.webp" alt="Dev rice"> |
 
-| Isabel |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/f2a0002f-3370-4361-9301-08abadcad600" alt="Isabel Rice" align="center"> |
+| Cruel World | Sunset |
+|:-:|:-:|
+| <img src="config/bspwm/rices/cruel-world/preview.webp" alt="Cruel World rice"> | <img src="config/bspwm/rices/sunset/preview.webp" alt="Sunset rice"> |
 
+| Grayscale | Silvia |
+|:-:|:-:|
+| <img src="config/bspwm/rices/grayscale/preview.webp" alt="Grayscale rice"> | <img src="config/bspwm/rices/silvia/preview.webp" alt="Silvia rice"> |
 
-| Silvia |
-|:-:|
-|<img src="https://github.com/gh0stzk/dotfiles/assets/67278339/616c2d93-fabf-41c2-9ab8-9c7b4d6a2e35" alt="Silvia Rice" align="center">|
-
-| Pamela |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/f9e85839-53c9-4e15-a800-8a2f7ca40691" alt="Pamela Rice" align="center"> |
-
-| Brenda |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/22e37944-5aad-46bf-8934-3a57d1718ed2" alt="Brenda Rice" align="center"> |
-
-| Daniela |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/f296d6b4-9c8a-49ae-bf63-d82e5105f122" alt="Daniela Rice" align="center"> |
-
-| h4ck3r |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/2d55fcc6-1ea4-4d56-8c46-3a3fe10566fe" alt="Hacker Rice" align="center"> |
-
-| Varinka |
-|:-:|
-| <img src="https://github.com/gh0stzk/dotfiles/assets/67278339/454d82b4-8f09-4768-bf51-6ce7818ad226" alt="Varinka Rice" align="center"> |
+| Isabel | h4ck3r |
+|:-:|:-:|
+| <img src="config/bspwm/rices/isabel/preview.webp" alt="Isabel rice"> | <img src="config/bspwm/rices/h4ck3r/preview.webp" alt="h4ck3r rice"> |
 
 ---
 

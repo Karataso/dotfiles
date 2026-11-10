@@ -497,6 +497,28 @@ install_dotfiles() {
         xdg-user-dirs-update
     fi
 
+    # bspwmrc starts sxhkd with this exact file, so prove the installed copy is
+    # the one we ship instead of leaving "the keybinds did nothing" to guesswork.
+    installed_sxhkdrc="$HOME/.config/bspwm/config/sxhkdrc"
+    if [ -f "$installed_sxhkdrc" ]; then
+        if cmp -s "$dots_dir/config/bspwm/config/sxhkdrc" "$installed_sxhkdrc"; then
+            bindings=$(grep -cE '^[^[:space:]#].*\+' "$installed_sxhkdrc")
+            printf "%s%sKeybinds: %s bindings installed in %s%s%s\n" \
+                "$BLD" "$CGR" "$bindings" "$CBL" "$installed_sxhkdrc" "$CNC"
+        else
+            printf "%s%sWarning: %s differs from the keybinds being installed.%s\n" \
+                "$BLD" "$CRE" "$installed_sxhkdrc" "$CNC"
+        fi
+    else
+        printf "%s%sWarning: no sxhkdrc was installed, the keybinds will not work.%s\n" \
+            "$BLD" "$CRE" "$CNC"
+    fi
+
+    # Apply them now if this is being run inside a live bspwm session
+    if pkill -USR1 -x sxhkd 2>/dev/null; then
+        printf "%s%sReloaded sxhkd with the new keybinds.%s\n" "$BLD" "$CGR" "$CNC"
+    fi
+
     printf "\n%s%sDotfiles installed successfully!%s\n" "$BLD" "$CGR" "$CNC"
     sleep 3
 }
@@ -554,20 +576,46 @@ setup_display_manager() {
     # web-greeter only lives in the AUR, so paru builds it. If that fails, fall
     # back to the GTK greeter instead of leaving you without a login screen.
     greeter_session="lightdm-gtk-greeter"
-    greeter_theme=""
+    greeter_theme_name=""
+    themes_dir="/usr/share/web-greeter/themes"
     printf "%b\n" "${BLD}${CYE}Installing the web greeter (AUR build, this can take a while)...${CNC}"
     if command -v paru >/dev/null 2>&1 && paru -S --noconfirm --needed web-greeter; then
         greeter_session="web-greeter"
-        greeter_theme="$dots_dir/misc/lightdm/greeter"
 
-        if [ -d "$greeter_theme" ]; then
-            printf "%b\n" "${BLD}${CYE}Installing the 'greeter' theme...${CNC}"
-            sudo mkdir -p /usr/share/web-greeter/themes
-            sudo rm -rf /usr/share/web-greeter/themes/greeter
-            sudo cp -R "$greeter_theme" /usr/share/web-greeter/themes/greeter
+        # Use the theme that ships with web-greeter. A copy of our own theme is
+        # pointless here: it only adds a second theme to keep in sync, and a
+        # theme that throws a JS error makes web-greeter fall back to the
+        # default one anyway (detect_theme_errors = true).
+        greeter_theme_name="default"
+        if [ ! -d "$themes_dir/default" ]; then
+            greeter_theme_name=$(find "$themes_dir" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort | head -n 1)
+        fi
+
+        if [ -z "$greeter_theme_name" ]; then
+            printf "%b\n" "${BLD}${CRE}No themes in ${themes_dir}. Using web-greeter's built-in default.${CNC}"
+            greeter_theme_name="default"
         else
-            printf "%b\n" "${BLD}${CRE}Theme not found at ${greeter_theme}. Using web-greeter's default theme.${CNC}"
-            greeter_theme=""
+            theme_index="$themes_dir/$greeter_theme_name/index.html"
+            printf "%b\n" "${BLD}${CYE}Using the ${CBL}${greeter_theme_name}${CYE} theme, without a background image...${CNC}"
+
+            # Same file means no duplicate work on a re-run
+            if [ -f "$theme_index" ] && ! grep -q 'dots-no-background' "$theme_index"; then
+                patched=$(mktemp)
+                awk '
+                    /<\/head>/ && !done {
+                        print "<style id=\"dots-no-background\">"
+                        print "html, body, body > div, #background, #bg, .background {"
+                        print "  background-image: none !important;"
+                        print "  background-color: #161616 !important;"
+                        print "}"
+                        print "</style>"
+                        done = 1
+                    }
+                    { print }
+                ' "$theme_index" > "$patched" &&
+                    sudo cp "$patched" "$theme_index"
+                rm -f "$patched"
+            fi
         fi
     else
         printf "%b\n" "${BLD}${CRE}web-greeter could not be installed. Falling back to the GTK greeter.${CNC}"
@@ -619,8 +667,8 @@ EOF
         printf "%b\n" "${BLD}${CRE}LightDM config not found: ${CYE}${lightdm_conf}${CNC}"
     fi
 
-    # Point web-greeter at the installed theme, preserving the rest of its config
-    if [ "$greeter_session" = "web-greeter" ] && [ -n "$greeter_theme" ]; then
+    # Point web-greeter at that theme, preserving the rest of its config
+    if [ "$greeter_session" = "web-greeter" ] && [ -n "$greeter_theme_name" ]; then
         web_greeter_conf="/etc/lightdm/web-greeter.toml"
 
         if [ -f "$web_greeter_conf" ] && [ ! -f "${web_greeter_conf}.bak" ]; then
@@ -628,13 +676,13 @@ EOF
         fi
 
         if [ ! -f "$web_greeter_conf" ]; then
-            printf '[greeter]\ntheme = "greeter"\n' | sudo tee "$web_greeter_conf" >/dev/null
+            printf '[greeter]\ntheme = "%s"\n' "$greeter_theme_name" | sudo tee "$web_greeter_conf" >/dev/null
         elif sudo grep -qE '^[[:space:]]*theme[[:space:]]*=' "$web_greeter_conf"; then
-            sudo sed -i 's|^[[:space:]]*theme[[:space:]]*=.*|theme = "greeter"|' "$web_greeter_conf"
+            sudo sed -i "s|^[[:space:]]*theme[[:space:]]*=.*|theme = \"${greeter_theme_name}\"|" "$web_greeter_conf"
         elif sudo grep -qE '^\[greeter\]' "$web_greeter_conf"; then
-            sudo sed -i '/^\[greeter\]/a theme = "greeter"' "$web_greeter_conf"
+            sudo sed -i "/^\\[greeter\\]/a theme = \"${greeter_theme_name}\"" "$web_greeter_conf"
         else
-            printf '\n[greeter]\ntheme = "greeter"\n' | sudo tee -a "$web_greeter_conf" >/dev/null
+            printf '\n[greeter]\ntheme = "%s"\n' "$greeter_theme_name" | sudo tee -a "$web_greeter_conf" >/dev/null
         fi
     fi
 
