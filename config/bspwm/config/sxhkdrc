@@ -121,6 +121,10 @@ ctrl + alt + f
 ctrl + alt + m
     OpenApps --music
 
+# Music downloader (albumdown)
+ctrl + alt + d
+    OpenApps --albumdown
+
 # Telegram
 ctrl + alt + g
     OpenApps --telegram

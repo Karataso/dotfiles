@@ -23,6 +23,9 @@ case "$1" in
 	--netmanager)
 		NetManagerDM
 		;;
+	--albumdown)
+		AlbumDown
+		;;
 	--pass)
 		RofiPass
 		;;

@@ -1,0 +1,41 @@
+#!/bin/sh
+# Rofi front-end for albumdown: paste an album or artist link, choose options,
+# then let albumdown run in kitty where its own UI takes over.
+# Upstream: https://github.com/Karataso/albumdown
+
+THEME="$HOME/.config/bspwm/config/rofi-themes/AlbumDown.rasi"
+APP_DIR="$HOME/.local/share/albumdown"
+APP="$APP_DIR/albumdown"
+
+if [ ! -f "$APP" ]; then
+    if ! git clone --depth=1 https://github.com/Karataso/albumdown.git "$APP_DIR" >/dev/null 2>&1; then
+        command -v notify-send >/dev/null 2>&1 &&
+            notify-send "albumdown" "Could not download albumdown from GitHub."
+        exit 1
+    fi
+fi
+
+url=$(rofi -dmenu -theme "$THEME" -p "Album or artist link" -l 0)
+[ -n "$url" ] || exit 0
+
+mode=$(printf '%s\n' \
+    "Download" \
+    "Download + lyrics" \
+    "Everything (artist links, --all)" \
+    "Everything + lyrics" |
+    rofi -dmenu -theme "$THEME" -p "albumdown" -l 4)
+[ -n "$mode" ] || exit 0
+
+case "$mode" in
+    "Download + lyrics")             flags="--lyrics" ;;
+    "Everything (artist links, --all)") flags="--all" ;;
+    "Everything + lyrics")           flags="--all --lyrics" ;;
+    *)                               flags="" ;;
+esac
+
+kitty --name=AlbumDownTerm --class=FloaTerm -e sh -c '
+    bin=$1; url=$2; shift 2
+    "$bin" "$url" "$@"
+    printf "\nDone. Press Enter to close.\n"
+    read -r _
+' sh "$APP" "$url" $flags   # $flags splits into the flags above

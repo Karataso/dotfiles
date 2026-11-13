@@ -1,0 +1,80 @@
+// Karataso — https://github.com/Karataso/albumdown
+// Rofi prompt for the albumdown front-end; colours come from shared.rasi.
+
+configuration {
+    show-icons:                 false;
+}
+
+@import "shared.rasi"
+
+window {
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    width:                       45%;
+    border:                      1px solid;
+    border-radius:               8px;
+    border-color:                @selected;
+    background-color:            @background;
+}
+
+mainbox {
+    spacing:                     10px;
+    padding:                     15px;
+    background-color:            transparent;
+    children:                    [ "inputbar", "listview" ];
+}
+
+inputbar {
+    spacing:                     10px;
+    background-color:            transparent;
+    children:                    [ "textbox-prompt-colon", "prompt", "entry" ];
+}
+
+textbox-prompt-colon {
+    expand:                      false;
+    padding:                     8px 16px 8px 11px;
+    border-radius:               8px;
+    str:                         "♪";
+    background-color:            @active;
+    text-color:                  @background;
+}
+
+prompt {
+    padding:                     8px 12px;
+    border-radius:               8px;
+    background-color:            @selected;
+    text-color:                  @background;
+}
+
+entry {
+    padding:                     7px 11px 4px 11px;
+    border:                      1px solid;
+    border-radius:               8px;
+    border-color:                @selected;
+    background-color:            @background-alt;
+    text-color:                  @foreground;
+    placeholder:                 "https://music.youtube.com/playlist?list=... or @artist";
+    placeholder-color:           @foreground;
+}
+
+listview {
+    columns:                     1;
+    lines:                       6;
+    spacing:                     5px;
+    fixed-height:                true;
+    fixed-columns:               true;
+    background-color:            transparent;
+}
+
+element {
+    padding:                     8px;
+    border-radius:               8px;
+    background-color:            transparent;
+    text-color:                  @foreground;
+}
+
+element selected.normal {
+    background-color:            @selected;
+    text-color:                  @background;
+}
