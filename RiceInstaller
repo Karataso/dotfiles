@@ -37,6 +37,14 @@ deps_gh0stzk="gh0stzk-gtk-themes gh0stzk-cursor-qogirr gh0stzk-icons-beautyline 
 deps_chaotic="i3lock-color simple-mtpfs eww-git"
 deps_aur="xwinwrap-0.9-bin"
 
+# Laptops are machines with a battery; only they get power profile switching.
+has_battery() {
+    for type in /sys/class/power_supply/*/type; do
+        [ "$(cat "$type" 2>/dev/null)" = "Battery" ] && return 0
+    done
+    return 1
+}
+
 initial_checks() {
     # Verificar usuario root
     if [ "$(id -u)" = 0 ]; then
@@ -64,7 +72,7 @@ ${BLD}${CGR}  Packages${CNC}       official, gh0stzk, Chaotic-AUR and AUR
 ${BLD}${CGR}  Config${CNC}         copied from this checkout into ~/.config
 ${BLD}${CGR}  Backup${CNC}         optional, existing configs move to ~/.RiceBackup/<date>
 ${BLD}${CGR}  Login screen${CNC}   LightDM, themed from the active rice
-${BLD}${CGR}  Services${CNC}       MPD and the update timer
+${BLD}${CGR}  Services${CNC}       MPD, the update timer, power profiles on laptops
 ${BLD}${CGR}  Shell${CNC}          zsh
 
 ${BLD}${CYE}  System changes stay in /etc/pacman.conf, /etc/lightdm, /usr/local/bin,${CNC}
@@ -599,6 +607,18 @@ configure_services() {
     printf "%b\n" "${BLD}${CYE}Enabling user ArchUpdates service...${CNC}"
     systemctl --user enable --now ArchUpdates.timer
 
+    # Power profiles on laptops: performance while plugged in, power-saver on
+    # battery, checked by PowerProfile.timer every 10 seconds.
+    if has_battery; then
+        if command -v powerprofilesctl >/dev/null 2>&1; then
+            printf "%b\n" "${BLD}${CYE}Laptop detected, enabling power profiles...${CNC}"
+            sudo systemctl enable --now power-profiles-daemon.service
+            systemctl --user enable --now PowerProfile.timer
+        else
+            printf "%b\n" "${BLD}${CRE}power-profiles-daemon is missing, skipping power profiles.${CNC}"
+        fi
+    fi
+
     # Virtual Machine Detection
     is_virtual_machine() {
         systemd-detect-virt --quiet >/dev/null 2>&1
@@ -788,6 +808,7 @@ add_gh0stzk_repo
 add_chaotic_repo
 
 step "Refreshing package databases"
+has_battery && deps_official="$deps_official power-profiles-daemon"
 sudo pacman -Syy
 install_packages "Installing official repository packages" pacman "$deps_official"
 install_packages "Installing the gh0stzk packages" pacman "$deps_gh0stzk"

@@ -1,0 +1,6 @@
+[Unit]
+Description=Switch power profile when the charger is connected or removed
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/bspwm/bin/PowerProfile

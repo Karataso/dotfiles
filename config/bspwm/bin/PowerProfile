@@ -1,0 +1,31 @@
+#!/bin/sh
+# Set the power profile from the charger state. Runs from PowerProfile.timer;
+# stays quiet unless the profile actually changes, so no notification spam.
+
+[ -d /sys/class/power_supply ] || exit 0
+command -v powerprofilesctl >/dev/null 2>&1 || exit 0
+
+on_ac() {
+    for supply in /sys/class/power_supply/*; do
+        [ -r "$supply/type" ] || continue
+        [ "$(cat "$supply/type")" = "Battery" ] && continue
+        [ -r "$supply/online" ] || continue
+        [ "$(cat "$supply/online")" = "1" ] && return 0
+    done
+    return 1
+}
+
+if on_ac; then
+    profile="performance"
+    reason="plugged in"
+else
+    profile="power-saver"
+    reason="on battery"
+fi
+
+[ "$(powerprofilesctl get 2>/dev/null)" = "$profile" ] && exit 0
+powerprofilesctl set "$profile" || exit 1
+
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send -a "Power Profile" "Power profile: $profile" "Switched because the laptop is $reason"
+fi
